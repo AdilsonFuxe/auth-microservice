@@ -7,6 +7,7 @@ import {
 import {
   badRequest,
   forbidden,
+  ok,
   serverError,
 } from '@/src/presentation/helpers/http/http-helper';
 import { HttpRequest, Validation } from '@/src/presentation/protocols';
@@ -112,5 +113,11 @@ describe('SignUpController', () => {
     jest.spyOn(authenticationStub, 'auth').mockImplementationOnce(trhowError);
     const httpResonse = await sut.handle(mockHttpRequest());
     expect(httpResonse).toEqual(serverError(new Error()));
+  });
+
+  test('Should return 201 if valid data is provided', async () => {
+    const { sut } = makeSut();
+    const httpResonse = await sut.handle(mockHttpRequest());
+    expect(httpResonse).toEqual(ok({ accessToken: 'any_access_token' }));
   });
 });
