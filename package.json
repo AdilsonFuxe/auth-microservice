@@ -9,7 +9,8 @@
     "test:unit": "npm test -- --passWithNoTests --watch -c jest-unit-config.ts",
     "test:integration": "npm test -- --passWithNoTests --watch -c jest-integration-config.ts",
     "test:staged": "npm test -- --findRelatedTests",
-    "test:ci": "npm test -- --coverage"
+    "test:ci": "npm test -- --coverage",
+    "prepare": "husky install"
   },
   "keywords": [],
   "author": "AdilsonFuxe",
@@ -28,7 +29,9 @@
     "eslint-plugin-promise": "^4.3.1",
     "faker": "^5.5.3",
     "git-commit-msg-linter": "^3.2.6",
+    "husky": "^7.0.1",
     "jest": "^27.0.6",
+    "lint-staged": "^11.1.2",
     "prettier": "^2.3.2",
     "ts-jest": "^27.0.4",
     "ts-node": "^10.2.0",
