@@ -1,9 +1,11 @@
 import {
+  Encrypter,
   HashComparer,
   LoadAccountByEmailRepository,
 } from '@/src/data/protocols';
 import { DbAuthentication } from '@/src/data/usecases/db-authentication';
 import {
+  mockEncrypter,
   mockHashComparer,
   mockLoadAccountByEmailRepositoryStub,
 } from '@/test-suite/data';
@@ -14,20 +16,24 @@ type SutTypes = {
   sut: DbAuthentication;
   loadAccountByEmailRepositoryStub: LoadAccountByEmailRepository;
   hashComparerStub: HashComparer;
+  encrypterStub: Encrypter;
 };
 
 const makeSut = (): SutTypes => {
   const loadAccountByEmailRepositoryStub =
     mockLoadAccountByEmailRepositoryStub();
   const hashComparerStub = mockHashComparer();
+  const encrypterStub = mockEncrypter();
   const sut = new DbAuthentication(
     loadAccountByEmailRepositoryStub,
-    hashComparerStub
+    hashComparerStub,
+    encrypterStub
   );
   return {
     sut,
     loadAccountByEmailRepositoryStub,
     hashComparerStub,
+    encrypterStub,
   };
 };
 
@@ -93,5 +99,12 @@ describe('DbAuthentication Usecase', () => {
 
     const accessToken = await sut.auth(mockAuthenticationParams());
     expect(accessToken).toBeNull();
+  });
+
+  test('Should call Encrypter with correct id', async () => {
+    const { sut, encrypterStub } = makeSut();
+    const encryptSpy = jest.spyOn(encrypterStub, 'encrypt');
+    await sut.auth(mockAuthenticationParams());
+    expect(encryptSpy).toHaveBeenCalledWith('valid_id');
   });
 });
