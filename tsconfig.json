@@ -4,14 +4,11 @@
     "module": "commonjs",
     "target": "es2019",
     "esModuleInterop": true,
-    "strictNullChecks": true,
     "sourceMap": true,
     "rootDir": "src",
-    "baseUrl": "src",
+    "baseUrl": ".",
     "paths": {
-      "@/*": [
-        "*"
-      ]
+      "@/src/*": ["src/*"]
     }
   }
 }

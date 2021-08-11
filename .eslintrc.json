@@ -4,6 +4,6 @@
     "project": "./tsconfig.json"
   },
   "rules": {
-   
+   "@typescript-eslint/consistent-type-definitions": "false",
   }
 }
