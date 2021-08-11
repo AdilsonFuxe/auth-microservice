@@ -6,9 +6,12 @@
     "esModuleInterop": true,
     "strictNullChecks": true,
     "sourceMap": true,
-  },
-  "include": [
-    "src"
-  ],
-  "exclude": []
+    "rootDir": "src",
+    "baseUrl": "src",
+    "paths": {
+      "@/*": [
+        "*"
+      ]
+    }
+  }
 }
