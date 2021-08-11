@@ -84,7 +84,12 @@ describe('DbAddAccount UseCase', () => {
     const addSpy = jest.spyOn(addAccountRepositoryStub, 'add');
     const accountParams = mockAddAccountParams();
     await sut.add(accountParams);
-    expect(addSpy).toHaveBeenCalledWith(accountParams);
+    expect(addSpy).toHaveBeenCalledWith({
+      email: accountParams.email,
+      firstName: accountParams.firstName,
+      lastName: accountParams.lastName,
+      password: 'hashed_password',
+    });
   });
 
   it('Should throw if AddAccountRepository throw', async () => {
