@@ -7,7 +7,11 @@ import {
   Validation,
 } from '@/src/presentation/protocols';
 import { ContactInUseError } from '../errors';
-import { badRequest, forbidden } from '../helpers/http/http-helper';
+import {
+  badRequest,
+  forbidden,
+  serverError,
+} from '../helpers/http/http-helper';
 
 export class SignUpController implements Controller {
   constructor(
@@ -16,22 +20,26 @@ export class SignUpController implements Controller {
   ) {}
 
   async handle(httpRequest: HttpRequest): Promise<HttpResponse> {
-    const error = await this.validation.validate(httpRequest.body);
-    if (error) {
-      return badRequest(error);
+    try {
+      const error = await this.validation.validate(httpRequest.body);
+      if (error) {
+        return badRequest(error);
+      }
+      const { firstName, lastName, email, password } = httpRequest.body;
+      const account = await this.addAccount.add({
+        firstName,
+        lastName,
+        email,
+        password,
+      });
+      if (!account) {
+        return forbidden(new ContactInUseError());
+      }
+      return Promise.resolve({
+        statusCode: HttpStatusCode.ok,
+      });
+    } catch (error) {
+      return serverError(error);
     }
-    const { firstName, lastName, email, password } = httpRequest.body;
-    const account = await this.addAccount.add({
-      firstName,
-      lastName,
-      email,
-      password,
-    });
-    if (!account) {
-      return forbidden(new ContactInUseError());
-    }
-    return Promise.resolve({
-      statusCode: HttpStatusCode.ok,
-    });
   }
 }
