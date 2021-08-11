@@ -39,12 +39,16 @@ describe('DbAddAccount UseCase', () => {
 
   it('Should throw if AddAccountRepository throw', async () => {
     const { sut, addAccountRepositoryStub } = makeSut();
-    const addSpy = jest
-      .spyOn(addAccountRepositoryStub, 'add')
-      .mockImplementationOnce(() => {
-        throw new Error();
-      });
+    jest.spyOn(addAccountRepositoryStub, 'add').mockImplementationOnce(() => {
+      throw new Error();
+    });
     const promise = sut.add(mockAddAccountParams());
     await expect(promise).rejects.toThrow();
+  });
+
+  it('Should return an account on AddAccountRepository success', async () => {
+    const { sut } = makeSut();
+    const result = await sut.add(mockAddAccountParams());
+    expect(result).toEqual(account);
   });
 });
