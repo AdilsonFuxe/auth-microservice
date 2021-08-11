@@ -1,21 +1,33 @@
-import { LoadAccountByEmailRepository } from '@/src/data/protocols';
+import {
+  HashComparer,
+  LoadAccountByEmailRepository,
+} from '@/src/data/protocols';
 import { DbAuthentication } from '@/src/data/usecases/db-authentication';
-import { mockLoadAccountByEmailRepositoryStub } from '@/test-suite/data';
+import {
+  mockHashComparer,
+  mockLoadAccountByEmailRepositoryStub,
+} from '@/test-suite/data';
 import { mockAccount, mockAuthenticationParams } from '@/test-suite/domain';
 import { trhowError } from '@/test-suite/helper';
 
 type SutTypes = {
   sut: DbAuthentication;
   loadAccountByEmailRepositoryStub: LoadAccountByEmailRepository;
+  hashComparerStub: HashComparer;
 };
 
 const makeSut = (): SutTypes => {
   const loadAccountByEmailRepositoryStub =
     mockLoadAccountByEmailRepositoryStub();
-  const sut = new DbAuthentication(loadAccountByEmailRepositoryStub);
+  const hashComparerStub = mockHashComparer();
+  const sut = new DbAuthentication(
+    loadAccountByEmailRepositoryStub,
+    hashComparerStub
+  );
   return {
     sut,
     loadAccountByEmailRepositoryStub,
+    hashComparerStub,
   };
 };
 
@@ -26,9 +38,9 @@ describe('DbAuthentication Usecase', () => {
       loadAccountByEmailRepositoryStub,
       'loadByEmail'
     );
-    const accountParams = mockAuthenticationParams();
-    await sut.auth(accountParams);
-    expect(loadByEmailSpy).toHaveBeenCalledWith(accountParams.email);
+    const authParams = mockAuthenticationParams();
+    await sut.auth(authParams);
+    expect(loadByEmailSpy).toHaveBeenCalledWith(authParams.email);
   });
 
   it('Should throw if loadAccountByEmailRepositoryStub throws', async () => {
@@ -40,12 +52,36 @@ describe('DbAuthentication Usecase', () => {
     await expect(promise).rejects.toThrow();
   });
 
-  test('Should return null if loadAccountByEmailRepositoryStub returns an account', async () => {
+  it('Should return null if loadAccountByEmailRepositoryStub returns an account', async () => {
     const { sut, loadAccountByEmailRepositoryStub } = makeSut();
     jest
       .spyOn(loadAccountByEmailRepositoryStub, 'loadByEmail')
       .mockReturnValueOnce(Promise.resolve(mockAccount()));
     const accessToken = await sut.auth(mockAuthenticationParams());
     expect(accessToken).toBeNull();
+  });
+
+  it('Should call HashComparer with correct values', async () => {
+    const { sut, hashComparerStub, loadAccountByEmailRepositoryStub } =
+      makeSut();
+    jest
+      .spyOn(loadAccountByEmailRepositoryStub, 'loadByEmail')
+      .mockReturnValueOnce(
+        Promise.resolve({
+          id: 'valid_id',
+          firstName: 'valid_first_name',
+          lastName: 'valid_last_name',
+          email: 'valid_email',
+          password: 'hashed_password',
+          accessToken: 'valid_accessToken',
+        })
+      );
+    const compareSpy = jest.spyOn(hashComparerStub, 'compare');
+    const authParams = mockAuthenticationParams();
+    await sut.auth(authParams);
+    expect(compareSpy).toHaveBeenCalledWith(
+      authParams.password,
+      'hashed_password'
+    );
   });
 });
