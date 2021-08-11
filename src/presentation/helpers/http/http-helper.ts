@@ -1,6 +1,11 @@
-import { HttpResponse } from '@/src/presentation/protocols';
+import { HttpResponse, HttpStatusCode } from '@/src/presentation/protocols';
 
 export const badRequest = (error: Error): HttpResponse => ({
-  statusCode: 400,
+  statusCode: HttpStatusCode.badRequest,
+  body: error,
+});
+
+export const forbidden = (error: Error): HttpResponse => ({
+  statusCode: HttpStatusCode.forbidden,
   body: error,
 });

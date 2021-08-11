@@ -22,6 +22,7 @@ const AccountSchema = new Schema<AccountDocument>(
       trim: true,
       unique: true,
       sparse: true,
+      required: true,
     },
     password: {
       type: String,

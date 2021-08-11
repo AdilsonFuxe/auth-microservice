@@ -6,7 +6,8 @@ import {
   HttpStatusCode,
   Validation,
 } from '@/src/presentation/protocols';
-import { badRequest } from '../helpers/http/http-helper';
+import { ContactInUseError } from '../errors';
+import { badRequest, forbidden } from '../helpers/http/http-helper';
 
 export class SignUpController implements Controller {
   constructor(
@@ -20,7 +21,15 @@ export class SignUpController implements Controller {
       return badRequest(error);
     }
     const { firstName, lastName, email, password } = httpRequest.body;
-    await this.addAccount.add({ firstName, lastName, email, password });
+    const account = await this.addAccount.add({
+      firstName,
+      lastName,
+      email,
+      password,
+    });
+    if (!account) {
+      return forbidden(new ContactInUseError());
+    }
     return Promise.resolve({
       statusCode: HttpStatusCode.ok,
     });
