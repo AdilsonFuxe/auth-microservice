@@ -5,10 +5,11 @@
     "target": "es2019",
     "esModuleInterop": true,
     "sourceMap": true,
-    "rootDir": "src",
+    "rootDir": ".",
     "baseUrl": ".",
     "paths": {
-      "@/src/*": ["src/*"]
+      "@/src/*": ["src/*"],
+      "@/test-suite/*": ["test-suite/*"],
     }
   }
 }
