@@ -10,6 +10,7 @@ import { ContactInUseError } from '../errors';
 import {
   badRequest,
   forbidden,
+  ok,
   serverError,
 } from '../helpers/http/http-helper';
 
@@ -36,13 +37,11 @@ export class SignUpController implements Controller {
       if (!account) {
         return forbidden(new ContactInUseError());
       }
-      await this.authentication.auth({
+      const accessToken = await this.authentication.auth({
         email: account.email,
         password: account.password,
       });
-      return Promise.resolve({
-        statusCode: HttpStatusCode.ok,
-      });
+      return ok({ accessToken });
     } catch (error) {
       return serverError(error);
     }
