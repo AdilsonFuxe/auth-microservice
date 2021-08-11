@@ -1,4 +1,4 @@
-import { AddAccount } from '@/src/domain/usecases';
+import { AddAccount, Authentication } from '@/src/domain/usecases';
 import { SignUpController } from '@/src/presentation/controllers/signup-controller';
 import {
   ContactInUseError,
@@ -11,8 +11,11 @@ import {
 } from '@/src/presentation/helpers/http/http-helper';
 import { HttpRequest, Validation } from '@/src/presentation/protocols';
 import { trhowError } from '@/test-suite/helper';
-import { mockValidationStub } from '@/test-suite/presentation';
-import { mockAddAccountStub } from '@/test-suite/presentation/mock-add-account';
+import {
+  mockValidationStub,
+  mockAuthenticationStub,
+  mockAddAccountStub,
+} from '@/test-suite/presentation';
 
 const mockHttpRequest = (): HttpRequest => ({
   body: {
@@ -28,16 +31,23 @@ type SutTypes = {
   sut: SignUpController;
   validationStub: Validation;
   addAccountStub: AddAccount;
+  authenticationStub: Authentication;
 };
 
 const makeSut = (): SutTypes => {
   const validationStub = mockValidationStub();
   const addAccountStub = mockAddAccountStub();
-  const sut = new SignUpController(validationStub, addAccountStub);
+  const authenticationStub = mockAuthenticationStub();
+  const sut = new SignUpController(
+    validationStub,
+    addAccountStub,
+    authenticationStub
+  );
   return {
     sut,
     validationStub,
     addAccountStub,
+    authenticationStub,
   };
 };
 
@@ -85,5 +95,15 @@ describe('SignUpController', () => {
     jest.spyOn(addAccountStub, 'add').mockImplementationOnce(trhowError);
     const httpResonse = await sut.handle(mockHttpRequest());
     expect(httpResonse).toEqual(serverError(new Error()));
+  });
+
+  test('Should call Authentication with correct values', async () => {
+    const { sut, authenticationStub } = makeSut();
+    const authSpy = jest.spyOn(authenticationStub, 'auth');
+    await sut.handle(mockHttpRequest());
+    expect(authSpy).toHaveBeenCalledWith({
+      email: 'valid_email',
+      password: 'valid_password',
+    });
   });
 });
