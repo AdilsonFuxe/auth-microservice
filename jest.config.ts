@@ -8,6 +8,7 @@ export default {
   transform: {
     '.+\\.ts$': 'ts-jest',
   },
+  preset: '@shelf/jest-mongodb',
   moduleNameMapper: {
     '@/src/(.*)': '<rootDir>/src/$1',
     '@/test-suite/(.*)': '<rootDir>/test-suite/$1',
