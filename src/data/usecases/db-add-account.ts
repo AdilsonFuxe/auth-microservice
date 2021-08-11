@@ -1,10 +1,17 @@
 import { AccountModel } from '@/src/domain/models';
 import { AddAccount, AddAccountParams } from '@/src/domain/usecases';
-import { AddAccountRepository } from '@/src/data/protocols';
+import {
+  AddAccountRepository,
+  LoadAccountByEmailRepository,
+} from '@/src/data/protocols';
 
 export class DbAddAccount implements AddAccount {
-  constructor(private readonly addAccountRepository: AddAccountRepository) {}
+  constructor(
+    private readonly addAccountRepository: AddAccountRepository,
+    private readonly loadAccountByEmailRepository: LoadAccountByEmailRepository
+  ) {}
   async add(params: AddAccountParams): Promise<AccountModel> {
+    await this.loadAccountByEmailRepository.loadByEmail(params.email);
     const account = await this.addAccountRepository.add(params);
     return account;
   }

@@ -1,4 +1,4 @@
-export interface AccountModel {
+export type AccountModel = {
   id: string;
   firstName: string;
   lastName: string;
@@ -7,4 +7,4 @@ export interface AccountModel {
   accessToken: string;
   createdAt?: Date;
   updatedAt?: Date;
-}
+};
