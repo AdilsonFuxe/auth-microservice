@@ -1,5 +1,6 @@
 import { SignUpController } from '@/src/presentation/controllers/signup-controller';
 import { HttpRequest, Validation } from '@/src/presentation/protocols';
+import { mockValidationStub } from '@/test-suite/presentation';
 
 const mockHttpRequest = (): HttpRequest => ({
   body: {
@@ -11,17 +12,25 @@ const mockHttpRequest = (): HttpRequest => ({
   },
 });
 
+type SutTypes = {
+  sut: SignUpController;
+  validationStub: Validation;
+};
+
+const makeSut = (): SutTypes => {
+  const validationStub = mockValidationStub();
+  const sut = new SignUpController(validationStub);
+  return {
+    sut,
+    validationStub,
+  };
+};
+
 describe('SignUpController', () => {
   it('Should call Validation with correct values', async () => {
-    class ValidationStub implements Validation {
-      validate() {
-        return null;
-      }
-    }
-    const validationStub = new ValidationStub();
+    const { sut, validationStub } = makeSut();
     const validateSpy = jest.spyOn(validationStub, 'validate');
     const httpRequest = mockHttpRequest();
-    const sut = new SignUpController(validationStub);
     await sut.handle(httpRequest);
     expect(validateSpy).toHaveBeenCalledWith(httpRequest.body);
   });
