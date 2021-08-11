@@ -1,4 +1,4 @@
-import { AddAccount } from '@/src/domain/usecases';
+import { AddAccount, Authentication } from '@/src/domain/usecases';
 import {
   Controller,
   HttpRequest,
@@ -16,7 +16,8 @@ import {
 export class SignUpController implements Controller {
   constructor(
     private readonly validation: Validation,
-    private readonly addAccount: AddAccount
+    private readonly addAccount: AddAccount,
+    private readonly authentication: Authentication
   ) {}
 
   async handle(httpRequest: HttpRequest): Promise<HttpResponse> {
@@ -35,6 +36,10 @@ export class SignUpController implements Controller {
       if (!account) {
         return forbidden(new ContactInUseError());
       }
+      await this.authentication.auth({
+        email: account.email,
+        password: account.password,
+      });
       return Promise.resolve({
         statusCode: HttpStatusCode.ok,
       });
