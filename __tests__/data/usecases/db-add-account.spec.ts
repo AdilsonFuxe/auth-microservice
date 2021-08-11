@@ -41,13 +41,22 @@ describe('DbAddAccount UseCase', () => {
     expect(loadByEmailSpy).toHaveBeenCalledWith(accountParams.email);
   });
 
-  it('Should throw if LoadAccountByContactRepository throws', async () => {
+  it('Should throw if loadAccountByEmailRepositoryStub throws', async () => {
     const { sut, loadAccountByEmailRepositoryStub } = makeSut();
     jest
       .spyOn(loadAccountByEmailRepositoryStub, 'loadByEmail')
       .mockImplementationOnce(trhowError);
     const promise = sut.add(mockAddAccountParams());
     await expect(promise).rejects.toThrow();
+  });
+
+  test('Should return null if loadAccountByEmailRepositoryStub returns an account', async () => {
+    const { sut, loadAccountByEmailRepositoryStub } = makeSut();
+    jest
+      .spyOn(loadAccountByEmailRepositoryStub, 'loadByEmail')
+      .mockReturnValueOnce(Promise.resolve(mockAccount()));
+    const account = await sut.add(mockAddAccountParams());
+    expect(account).toBeNull();
   });
 
   it('Should call AddAccountRepository with correct values', async () => {
