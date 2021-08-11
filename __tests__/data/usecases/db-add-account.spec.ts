@@ -36,4 +36,15 @@ describe('DbAddAccount UseCase', () => {
     await sut.add(accountParams);
     expect(addSpy).toHaveBeenCalledWith(accountParams);
   });
+
+  it('Should throw if AddAccountRepository throw', async () => {
+    const { sut, addAccountRepositoryStub } = makeSut();
+    const addSpy = jest
+      .spyOn(addAccountRepositoryStub, 'add')
+      .mockImplementationOnce(() => {
+        throw new Error();
+      });
+    const promise = sut.add(mockAddAccountParams());
+    await expect(promise).rejects.toThrow();
+  });
 });
