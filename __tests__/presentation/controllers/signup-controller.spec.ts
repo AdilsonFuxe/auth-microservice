@@ -7,8 +7,10 @@ import {
 import {
   badRequest,
   forbidden,
+  serverError,
 } from '@/src/presentation/helpers/http/http-helper';
 import { HttpRequest, Validation } from '@/src/presentation/protocols';
+import { trhowError } from '@/test-suite/helper';
 import { mockValidationStub } from '@/test-suite/presentation';
 import { mockAddAccountStub } from '@/test-suite/presentation/mock-add-account';
 
@@ -76,5 +78,12 @@ describe('SignUpController', () => {
       .mockReturnValueOnce(Promise.resolve(null));
     const httpResonse = await sut.handle(mockHttpRequest());
     expect(httpResonse).toEqual(forbidden(new ContactInUseError()));
+  });
+
+  test('Should return 500 if AddAccount throws', async () => {
+    const { sut, addAccountStub } = makeSut();
+    jest.spyOn(addAccountStub, 'add').mockImplementationOnce(trhowError);
+    const httpResonse = await sut.handle(mockHttpRequest());
+    expect(httpResonse).toEqual(serverError(new Error()));
   });
 });
