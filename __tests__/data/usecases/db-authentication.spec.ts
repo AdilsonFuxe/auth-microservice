@@ -101,6 +101,13 @@ describe('DbAuthentication Usecase', () => {
     expect(accessToken).toBeNull();
   });
 
+  test('Should throw if HashComparer throws', async () => {
+    const { sut, hashComparerStub } = makeSut();
+    jest.spyOn(hashComparerStub, 'compare').mockImplementationOnce(trhowError);
+    const promise = sut.auth(mockAuthenticationParams());
+    await expect(promise).rejects.toThrow();
+  });
+
   test('Should call Encrypter with correct id', async () => {
     const { sut, encrypterStub } = makeSut();
     const encryptSpy = jest.spyOn(encrypterStub, 'encrypt');
