@@ -1,18 +1,7 @@
 import { AddAccountRepository } from '@/src/data/protocols';
 import { DbAddAccount } from '@/src/data/usecases/db-add-account';
-import { AccountModel } from '@/src/domain/models';
+import { mockAddAccountRepositoryStub } from '@/test-suite/data';
 import { mockAccount, mockAddAccountParams } from '@/test-suite/domain';
-
-const account = mockAccount();
-
-const mockAddAccountRepositoryStub = (): AddAccountRepository => {
-  class AddAccountRepositoryStub implements AddAccountRepository {
-    async add(): Promise<AccountModel> {
-      return Promise.resolve(account);
-    }
-  }
-  return new AddAccountRepositoryStub();
-};
 
 type SutTypes = {
   sut: DbAddAccount;
@@ -49,6 +38,6 @@ describe('DbAddAccount UseCase', () => {
   it('Should return an account on AddAccountRepository success', async () => {
     const { sut } = makeSut();
     const result = await sut.add(mockAddAccountParams());
-    expect(result).toEqual(account);
+    expect(result).toEqual(mockAccount());
   });
 });
