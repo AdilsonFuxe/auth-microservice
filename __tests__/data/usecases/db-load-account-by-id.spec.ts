@@ -1,6 +1,7 @@
 import { LoadAccountByIdlRepository } from '@src/data/protocols';
 import { DbLoadAccountById } from '@src/data/usecases/db-load-accout-by-id';
 import { mockLoadAccountByIdRepository } from '@test-suite/data';
+import { trhowError } from '@test-suite/helper';
 
 type SutTypes = {
   sut: DbLoadAccountById;
@@ -22,5 +23,14 @@ describe('LoadAccountById Usecase', () => {
     const loadByIdSpy = jest.spyOn(loadAccountByIdRepositoryStub, 'loadById');
     await sut.loadById('any_id');
     expect(loadByIdSpy).toHaveBeenCalledWith('any_id');
+  });
+
+  it('Should throw if LoadAccountByIdRepository throws', async () => {
+    const { sut, loadAccountByIdRepositoryStub } = makeSut();
+    jest
+      .spyOn(loadAccountByIdRepositoryStub, 'loadById')
+      .mockImplementationOnce(trhowError);
+    const promise = sut.loadById('any_id');
+    await expect(promise).rejects.toThrow();
   });
 });
