@@ -2,6 +2,7 @@ import {
   AddAccountRepository,
   LoadAccountByEmailRepository,
   LoadAccountByIdlRepository,
+  LoadAccountByTokenRepository,
   UpdateAcessTokenRepository,
 } from '@src/data/protocols';
 import { AccountModel } from '@src/domain/models';
@@ -14,7 +15,8 @@ export class AccountMongoRepository
     AddAccountRepository,
     LoadAccountByEmailRepository,
     UpdateAcessTokenRepository,
-    LoadAccountByIdlRepository
+    LoadAccountByIdlRepository,
+    LoadAccountByTokenRepository
 {
   async add(params: AddAccountParams): Promise<AccountModel> {
     const doc = new AccountMongooseModel(params);
@@ -34,6 +36,11 @@ export class AccountMongoRepository
 
   async loadById(id: string): Promise<AccountModel> {
     const account = await AccountMongooseModel.findById(id).lean();
+    return MongoHelper.serialize(account);
+  }
+
+  async loadByToken(accessToken: string): Promise<AccountModel> {
+    const account = await AccountMongooseModel.findOne({ accessToken }).lean();
     return MongoHelper.serialize(account);
   }
 }
