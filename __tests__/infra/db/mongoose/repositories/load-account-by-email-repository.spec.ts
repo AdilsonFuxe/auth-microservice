@@ -1,7 +1,7 @@
-import { MongoHelper } from '@/src/infra/db/mongoose/helper/mongo-helper';
-import { AccountMongooseModel } from '@/src/infra/db/mongoose/models';
-import { AccountMongoRepository } from '@/src/infra/db/mongoose/repositories';
-import { mockAddAccountParams } from '@/test-suite/domain';
+import { MongoHelper } from '@src/infra/db/mongoose/helper/mongo-helper';
+import { AccountMongooseModel } from '@src/infra/db/mongoose/models';
+import { AccountMongoRepository } from '@src/infra/db/mongoose/repositories';
+import { mockAddAccountParams } from '@test-suite/domain';
 import faker from 'faker';
 
 const makeSut = () => new AccountMongoRepository();

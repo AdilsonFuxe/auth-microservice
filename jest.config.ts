@@ -10,7 +10,7 @@ export default {
   },
   preset: '@shelf/jest-mongodb',
   moduleNameMapper: {
-    '@/src/(.*)': '<rootDir>/src/$1',
-    '@/test-suite/(.*)': '<rootDir>/test-suite/$1',
+    '@src/(.*)': '<rootDir>/src/$1',
+    '@test-suite/(.*)': '<rootDir>/test-suite/$1',
   },
 };

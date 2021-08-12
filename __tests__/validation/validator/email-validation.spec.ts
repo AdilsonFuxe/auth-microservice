@@ -1,8 +1,8 @@
-import { InvalidParamError } from '@/src/presentation/errors';
-import { EmailValidator } from '@/src/validation/protocols';
-import { EmailValidation } from '@/src/validation/validators/email-validation';
-import { trhowError } from '@/test-suite/helper';
-import { mockEmailVaidator } from '@/test-suite/validation';
+import { InvalidParamError } from '@src/presentation/errors';
+import { EmailValidator } from '@src/validation/protocols';
+import { EmailValidation } from '@src/validation/validators/email-validation';
+import { trhowError } from '@test-suite/helper';
+import { mockEmailVaidator } from '@test-suite/validation';
 
 type SutTypes = {
   sut: EmailValidation;

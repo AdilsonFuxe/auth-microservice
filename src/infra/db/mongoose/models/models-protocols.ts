@@ -1,4 +1,4 @@
-import { AccountModel } from '@/src/domain/models';
+import { AccountModel } from '@src/domain/models';
 import { Document, Model } from 'mongoose';
 
 export type AccountDocument = AccountModel &

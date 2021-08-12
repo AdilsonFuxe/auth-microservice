@@ -2,12 +2,12 @@ import {
   AddAccountRepository,
   Hasher,
   LoadAccountByEmailRepository,
-} from '@/src/data/protocols';
-import { DbAddAccount } from '@/src/data/usecases/db-add-account';
-import { mockAddAccountRepositoryStub, mockHasher } from '@/test-suite/data';
-import { mockLoadAccountByEmailRepositoryStub } from '@/test-suite/data/mock-load-account-by-email-repository';
-import { mockAccount, mockAddAccountParams } from '@/test-suite/domain';
-import { trhowError } from '@/test-suite/helper';
+} from '@src/data/protocols';
+import { DbAddAccount } from '@src/data/usecases/db-add-account';
+import { mockAddAccountRepositoryStub, mockHasher } from '@test-suite/data';
+import { mockLoadAccountByEmailRepositoryStub } from '@test-suite/data/mock-load-account-by-email-repository';
+import { mockAccount, mockAddAccountParams } from '@test-suite/domain';
+import { trhowError } from '@test-suite/helper';
 
 type SutTypes = {
   sut: DbAddAccount;
@@ -80,7 +80,11 @@ describe('DbAddAccount UseCase', () => {
   });
 
   it('Should call AddAccountRepository with correct values', async () => {
-    const { sut, addAccountRepositoryStub } = makeSut();
+    const { sut, addAccountRepositoryStub, loadAccountByEmailRepositoryStub } =
+      makeSut();
+    jest
+      .spyOn(loadAccountByEmailRepositoryStub, 'loadByEmail')
+      .mockReturnValueOnce(Promise.resolve(null));
     const addSpy = jest.spyOn(addAccountRepositoryStub, 'add');
     const accountParams = mockAddAccountParams();
     await sut.add(accountParams);
@@ -93,7 +97,11 @@ describe('DbAddAccount UseCase', () => {
   });
 
   it('Should throw if AddAccountRepository throw', async () => {
-    const { sut, addAccountRepositoryStub } = makeSut();
+    const { sut, addAccountRepositoryStub, loadAccountByEmailRepositoryStub } =
+      makeSut();
+    jest
+      .spyOn(loadAccountByEmailRepositoryStub, 'loadByEmail')
+      .mockReturnValueOnce(Promise.resolve(null));
     jest
       .spyOn(addAccountRepositoryStub, 'add')
       .mockImplementationOnce(trhowError);
@@ -102,7 +110,10 @@ describe('DbAddAccount UseCase', () => {
   });
 
   it('Should return an account on AddAccountRepository success', async () => {
-    const { sut } = makeSut();
+    const { sut, loadAccountByEmailRepositoryStub } = makeSut();
+    jest
+      .spyOn(loadAccountByEmailRepositoryStub, 'loadByEmail')
+      .mockReturnValueOnce(Promise.resolve(null));
     const result = await sut.add(mockAddAccountParams());
     expect(result).toEqual(mockAccount());
   });

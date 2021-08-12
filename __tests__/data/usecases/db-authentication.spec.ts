@@ -3,16 +3,16 @@ import {
   HashComparer,
   LoadAccountByEmailRepository,
   UpdateAcessTokenRepository,
-} from '@/src/data/protocols';
-import { DbAuthentication } from '@/src/data/usecases/db-authentication';
+} from '@src/data/protocols';
+import { DbAuthentication } from '@src/data/usecases/db-authentication';
 import {
   mockEncrypter,
   mockHashComparer,
   mockLoadAccountByEmailRepositoryStub,
   mockUpdateAccessTokenRepository,
-} from '@/test-suite/data';
-import { mockAccount, mockAuthenticationParams } from '@/test-suite/domain';
-import { trhowError } from '@/test-suite/helper';
+} from '@test-suite/data';
+import { mockAccount, mockAuthenticationParams } from '@test-suite/domain';
+import { trhowError } from '@test-suite/helper';
 
 type SutTypes = {
   sut: DbAuthentication;

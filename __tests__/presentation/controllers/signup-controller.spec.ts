@@ -1,22 +1,19 @@
-import { AddAccount, Authentication } from '@/src/domain/usecases';
-import { SignUpController } from '@/src/presentation/controllers/signup-controller';
-import {
-  ContactInUseError,
-  MissingParamError,
-} from '@/src/presentation/errors';
+import { AddAccount, Authentication } from '@src/domain/usecases';
+import { SignUpController } from '@src/presentation/controllers/signup-controller';
+import { ContactInUseError, MissingParamError } from '@src/presentation/errors';
 import {
   badRequest,
   forbidden,
   ok,
   serverError,
-} from '@/src/presentation/helpers/http/http-helper';
-import { HttpRequest, Validation } from '@/src/presentation/protocols';
-import { trhowError } from '@/test-suite/helper';
+} from '@src/presentation/helpers/http/http-helper';
+import { HttpRequest, Validation } from '@src/presentation/protocols';
+import { trhowError } from '@test-suite/helper';
 import {
   mockValidationStub,
   mockAuthenticationStub,
   mockAddAccountStub,
-} from '@/test-suite/presentation';
+} from '@test-suite/presentation';
 
 const mockHttpRequest = (): HttpRequest => ({
   body: {

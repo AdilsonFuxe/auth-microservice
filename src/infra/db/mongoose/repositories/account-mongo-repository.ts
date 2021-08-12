@@ -2,11 +2,11 @@ import {
   AddAccountRepository,
   LoadAccountByEmailRepository,
   UpdateAcessTokenRepository,
-} from '@/src/data/protocols';
-import { AccountModel } from '@/src/domain/models';
-import { AddAccountParams } from '@/src/domain/usecases';
-import { AccountMongooseModel } from '@/src/infra/db/mongoose/models';
-import { MongoHelper } from '@/src/infra/db/mongoose/helper/mongo-helper';
+} from '@src/data/protocols';
+import { AccountModel } from '@src/domain/models';
+import { AddAccountParams } from '@src/domain/usecases';
+import { AccountMongooseModel } from '@src/infra/db/mongoose/models';
+import { MongoHelper } from '@src/infra/db/mongoose/helper/mongo-helper';
 
 export class AccountMongoRepository
   implements

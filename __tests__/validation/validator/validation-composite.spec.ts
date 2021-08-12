@@ -1,7 +1,7 @@
-import { MissingParamError } from '@/src/presentation/errors';
-import { Validation } from '@/src/presentation/protocols';
-import { ValidationComposite } from '@/src/validation/validators';
-import { mockValidation } from '@/test-suite/validation';
+import { MissingParamError } from '@src/presentation/errors';
+import { Validation } from '@src/presentation/protocols';
+import { ValidationComposite } from '@src/validation/validators';
+import { mockValidation } from '@test-suite/validation';
 
 type SutTypes = {
   sut: ValidationComposite;

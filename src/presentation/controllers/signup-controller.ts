@@ -1,11 +1,10 @@
-import { AddAccount, Authentication } from '@/src/domain/usecases';
+import { AddAccount, Authentication } from '@src/domain/usecases';
 import {
   Controller,
   HttpRequest,
   HttpResponse,
-  HttpStatusCode,
   Validation,
-} from '@/src/presentation/protocols';
+} from '@src/presentation/protocols';
 import { ContactInUseError } from '../errors';
 import {
   badRequest,

@@ -1,5 +1,5 @@
-import { LoadAccountByEmailRepository } from '@/src/data/protocols';
-import { AccountModel } from '@/src/domain/models';
+import { LoadAccountByEmailRepository } from '@src/data/protocols';
+import { AccountModel } from '@src/domain/models';
 import { mockAccount } from '../domain';
 
 export const mockLoadAccountByEmailRepositoryStub =

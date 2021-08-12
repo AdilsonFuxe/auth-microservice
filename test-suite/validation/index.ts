@@ -1,5 +1,5 @@
-import { Validation } from '@/src/presentation/protocols';
-import { EmailValidator } from '@/src/validation/protocols';
+import { Validation } from '@src/presentation/protocols';
+import { EmailValidator } from '@src/validation/protocols';
 
 export const mockEmailVaidator = (): EmailValidator => {
   class EmailValidatorStub implements EmailValidator {
