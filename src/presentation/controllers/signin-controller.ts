@@ -7,6 +7,7 @@ import {
 } from '@src/presentation/protocols';
 import {
   badRequest,
+  ok,
   serverError,
   unauthorized,
 } from '../helpers/http/http-helper';
@@ -27,6 +28,7 @@ export class SignInController implements Controller {
       if (!accessToken) {
         return unauthorized();
       }
+      return ok({ accessToken });
     } catch (error) {
       return serverError(error);
     }
