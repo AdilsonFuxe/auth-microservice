@@ -1,6 +1,7 @@
 import { LoadAccountByEmailRepository } from '@src/data/protocols';
 import { DbLoadAccountByEmail } from '@src/data/usecases/db-load-account-by-email';
 import { mockLoadAccountByEmailRepositoryStub } from '@test-suite/data';
+import { mockAccount } from '@test-suite/domain';
 import { trhowError } from '@test-suite/helper';
 
 type SutTypes = {
@@ -36,5 +37,11 @@ describe('DbLoadAccountByToken Usecase', () => {
       .mockImplementationOnce(trhowError);
     const promise = sut.loadByEmail('any_mail@mail.com');
     await expect(promise).rejects.toThrow();
+  });
+
+  it('Should return an account on LoadAccountByEmailRepository success', async () => {
+    const { sut } = makeSut();
+    const account = await sut.loadByEmail('any_mail@mail.com');
+    expect(account).toEqual(mockAccount());
   });
 });
