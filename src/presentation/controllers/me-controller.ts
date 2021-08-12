@@ -1,7 +1,7 @@
 import {
-  Controller,
   HttpRequest,
   HttpResponse,
+  Middleware,
 } from '@src/presentation/protocols';
 import {
   forbidden,
@@ -11,7 +11,7 @@ import {
 import { LoadAccountById } from '@src/domain/usecases/load-account-by-id';
 import { AccessDeniedError } from '../errors';
 
-export class MeController implements Controller {
+export class MeController implements Middleware {
   constructor(private readonly loadAccountById: LoadAccountById) {}
 
   async handle(httpRequest: HttpRequest): Promise<HttpResponse> {
