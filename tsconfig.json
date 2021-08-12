@@ -11,5 +11,8 @@
       "@src/*": ["src/*"],
       "@test-suite/*": ["test-suite/*"],
     }
-  }
+  },
+  "include": [
+    "src","__tests__", "test-suite"
+  ],
 }
