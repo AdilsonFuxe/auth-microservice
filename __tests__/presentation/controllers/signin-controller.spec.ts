@@ -4,6 +4,7 @@ import { MissingParamError } from '@src/presentation/errors';
 import {
   badRequest,
   serverError,
+  unauthorized,
 } from '@src/presentation/helpers/http/http-helper';
 import { HttpRequest, Validation } from '@src/presentation/protocols';
 import { trhowError } from '@test-suite/helper';
@@ -69,5 +70,14 @@ describe('SignIn Controller', () => {
     jest.spyOn(authenticationStub, 'auth').mockImplementationOnce(trhowError);
     const httpResonse = await sut.handle(mockHttpRequest());
     expect(httpResonse).toEqual(serverError(new Error()));
+  });
+
+  it('Should return 401 if an invalid credentials are provided', async () => {
+    const { sut, authenticationStub } = makeSut();
+    jest
+      .spyOn(authenticationStub, 'auth')
+      .mockReturnValueOnce(Promise.resolve(null));
+    const httpResponse = await sut.handle(mockHttpRequest());
+    expect(httpResponse).toEqual(unauthorized());
   });
 });
