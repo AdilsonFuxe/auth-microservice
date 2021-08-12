@@ -3,9 +3,11 @@ import { MeController } from '@src/presentation/controllers/me-controller';
 import { AccessDeniedError } from '@src/presentation/errors';
 import {
   forbidden,
+  ok,
   serverError,
 } from '@src/presentation/helpers/http/http-helper';
 import { HttpRequest } from '@src/presentation/protocols';
+import { mockAccount } from '@test-suite/domain';
 import { trhowError } from '@test-suite/helper';
 import { mockLoadAccountById } from '@test-suite/presentation';
 
@@ -51,5 +53,12 @@ describe('MeController', () => {
       .mockImplementationOnce(trhowError);
     const httpResponse = await sut.handle(mockHttpRequest());
     expect(httpResponse).toEqual(serverError(new Error()));
+  });
+
+  it('Should return 200 if LoadAccountById returns an account', async () => {
+    const { sut } = makeSut();
+    const httpResponse = await sut.handle(mockHttpRequest());
+    const { id, firstName, lastName, email } = mockAccount();
+    expect(httpResponse).toEqual(ok({ id, firstName, lastName, email }));
   });
 });
