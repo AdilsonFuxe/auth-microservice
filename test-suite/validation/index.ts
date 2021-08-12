@@ -1,3 +1,4 @@
+import { Validation } from '@/src/presentation/protocols';
 import { EmailValidator } from '@/src/validation/protocols';
 
 export const mockEmailVaidator = (): EmailValidator => {
@@ -7,4 +8,13 @@ export const mockEmailVaidator = (): EmailValidator => {
     }
   }
   return new EmailValidatorStub();
+};
+
+export const mockValidation = (): Validation => {
+  class ValidationStub implements Validation {
+    validate(input: any): Error {
+      return null;
+    }
+  }
+  return new ValidationStub();
 };
