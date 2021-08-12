@@ -1,6 +1,7 @@
 import { LoadAccountByIdlRepository } from '@src/data/protocols';
 import { DbLoadAccountById } from '@src/data/usecases/db-load-accout-by-id';
 import { mockLoadAccountByIdRepository } from '@test-suite/data';
+import { mockAccount } from '@test-suite/domain';
 import { trhowError } from '@test-suite/helper';
 
 type SutTypes = {
@@ -32,5 +33,11 @@ describe('LoadAccountById Usecase', () => {
       .mockImplementationOnce(trhowError);
     const promise = sut.loadById('any_id');
     await expect(promise).rejects.toThrow();
+  });
+
+  it('Should return a ccount on LoadAccountByIdRepository success', async () => {
+    const { sut } = makeSut();
+    const account = await sut.loadById('any_id');
+    expect(account).toEqual(mockAccount());
   });
 });
