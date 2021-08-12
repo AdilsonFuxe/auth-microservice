@@ -1,6 +1,7 @@
 import { Decrypter } from '@src/data/protocols';
 import { DbLoadAccountByToken } from '@src/data/usecases/db-load-account-by-token';
 import { mockDecrypter } from '@test-suite/data';
+import { trhowError } from '@test-suite/helper';
 
 type SutTypes = {
   sut: DbLoadAccountByToken;
@@ -31,5 +32,12 @@ describe('DbLoadAccountByToken Usecase', () => {
       .mockReturnValueOnce(Promise.resolve(null));
     const account = await sut.loadByToken('any_token');
     expect(account).toBeNull();
+  });
+
+  it('Should throw if Decrypter throws', async () => {
+    const { sut, decrypterStub } = makeSut();
+    jest.spyOn(decrypterStub, 'decrypt').mockImplementationOnce(trhowError);
+    const promise = sut.loadByToken('any_token');
+    await expect(promise).rejects.toThrow();
   });
 });
