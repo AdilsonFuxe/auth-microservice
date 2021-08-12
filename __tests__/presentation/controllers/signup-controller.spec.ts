@@ -100,8 +100,8 @@ describe('SignUpController', () => {
     const authSpy = jest.spyOn(authenticationStub, 'auth');
     await sut.handle(mockHttpRequest());
     expect(authSpy).toHaveBeenCalledWith({
-      email: 'valid_email',
-      password: 'valid_password',
+      email: 'any_email@mail.com',
+      password: 'any_password',
     });
   });
 
