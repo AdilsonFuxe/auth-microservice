@@ -15,6 +15,7 @@ export class DbForgotPassword implements ForgotPassword {
     const expiresIn = new Date();
     expiresIn.setMinutes(expiresIn.getMinutes() + 5);
     await this.updateForgotPasswordAccessTokenRepository.updateForgotPasswordToken(
+      id,
       {
         accessToken,
         expiresIn,

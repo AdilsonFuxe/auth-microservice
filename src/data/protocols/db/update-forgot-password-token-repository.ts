@@ -5,6 +5,7 @@ export type UpdateForgotPasswordAccessTokenParams = {
 
 export interface UpdateForgotPasswordAccessTokenRepository {
   updateForgotPasswordToken: (
+    id: string,
     params: UpdateForgotPasswordAccessTokenParams
   ) => Promise<void>;
 }

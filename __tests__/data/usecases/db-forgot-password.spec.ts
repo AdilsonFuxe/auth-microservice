@@ -65,7 +65,7 @@ describe('DbForgotPassword UseCase', () => {
     await sut.forgot('any_id');
     const expiresIn = new Date();
     expiresIn.setMinutes(expiresIn.getMinutes() + 5);
-    expect(updateAccessTokenSpy).toHaveBeenCalledWith({
+    expect(updateAccessTokenSpy).toHaveBeenCalledWith('any_id', {
       accessToken: 123456,
       expiresIn,
     });
