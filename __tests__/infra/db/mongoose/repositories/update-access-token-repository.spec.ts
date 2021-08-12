@@ -4,6 +4,8 @@ import { AccountMongooseModel } from '@/src/infra/db/mongoose/models';
 import { AccountMongoRepository } from '@/src/infra/db/mongoose/repositories';
 import faker from 'faker';
 
+const makeSut = () => new AccountMongoRepository();
+
 describe('UpdateAccessTokenMongoRepository', () => {
   beforeAll(async () => {
     await MongoHelper.connect(process.env.MONGO_URL as string);
@@ -15,7 +17,7 @@ describe('UpdateAccessTokenMongoRepository', () => {
   });
 
   it('Should update accessToken on success', async () => {
-    const sut = new AccountMongoRepository();
+    const sut = makeSut();
     const params = mockAddAccountParams();
     const account = await AccountMongooseModel.create(params);
     expect(account.accessToken).toBeFalsy();

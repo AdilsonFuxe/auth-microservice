@@ -3,6 +3,8 @@ import { mockAddAccountParams } from '@/test-suite/domain';
 import { AccountMongooseModel } from '@/src/infra/db/mongoose/models';
 import { AccountMongoRepository } from '@/src/infra/db/mongoose/repositories';
 
+const makeSut = () => new AccountMongoRepository();
+
 describe('AddAccountMongoRepository', () => {
   beforeAll(async () => {
     await MongoHelper.connect(process.env.MONGO_URL as string);
@@ -14,7 +16,7 @@ describe('AddAccountMongoRepository', () => {
   });
 
   it('Should return an account on add success', async () => {
-    const sut = new AccountMongoRepository();
+    const sut = makeSut();
     const accountParams = mockAddAccountParams();
     const account = await sut.add(accountParams);
     expect(account).toBeTruthy();
