@@ -4,6 +4,7 @@ import {
   mockDecrypter,
   mockLoadAccountByTokenRepository,
 } from '@test-suite/data';
+import { mockAccount } from '@test-suite/domain';
 import { trhowError } from '@test-suite/helper';
 
 type SutTypes = {
@@ -68,5 +69,11 @@ describe('DbLoadAccountByToken Usecase', () => {
 
     const account = await sut.loadByToken('any_token');
     expect(account).toBeNull();
+  });
+
+  it('Should return an account on success', async () => {
+    const { sut } = makeSut();
+    const account = await sut.loadByToken('any_token');
+    expect(account).toEqual(mockAccount());
   });
 });
