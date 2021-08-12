@@ -1,8 +1,12 @@
 import { Authentication } from '@src/domain/usecases';
 import { SignInController } from '@src/presentation/controllers/signin-controller';
 import { MissingParamError } from '@src/presentation/errors';
-import { badRequest } from '@src/presentation/helpers/http/http-helper';
+import {
+  badRequest,
+  serverError,
+} from '@src/presentation/helpers/http/http-helper';
 import { HttpRequest, Validation } from '@src/presentation/protocols';
+import { trhowError } from '@test-suite/helper';
 import {
   mockAuthenticationStub,
   mockValidationStub,
@@ -50,7 +54,7 @@ describe('SignIn Controller', () => {
     expect(httpResonse).toEqual(badRequest(new MissingParamError('any_field')));
   });
 
-  test('Should call Authentication with correct values', async () => {
+  it('Should call Authentication with correct values', async () => {
     const { sut, authenticationStub } = makeSut();
     const authSpy = jest.spyOn(authenticationStub, 'auth');
     await sut.handle(mockHttpRequest());
@@ -58,5 +62,12 @@ describe('SignIn Controller', () => {
       email: 'any_email@mail.com',
       password: 'any_password',
     });
+  });
+
+  it('Should return 500 if Authentication throws', async () => {
+    const { sut, authenticationStub } = makeSut();
+    jest.spyOn(authenticationStub, 'auth').mockImplementationOnce(trhowError);
+    const httpResonse = await sut.handle(mockHttpRequest());
+    expect(httpResonse).toEqual(serverError(new Error()));
   });
 });
