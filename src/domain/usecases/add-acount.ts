@@ -1,4 +1,4 @@
-import { AccountModel } from '../models';
+import { AccountModel } from '@src/domain/models';
 
 export type AddAccountParams = {
   firstName: string;
