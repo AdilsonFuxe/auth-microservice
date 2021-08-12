@@ -4,7 +4,7 @@ import {
   HashComparer,
   Hasher,
 } from '@src/data/protocols';
-import { GenerateAccessToken } from '@src/data/protocols/criptography/generate-accessToken';
+import { GenerateAccessToken } from '@src/data/protocols/criptography/generate-access-token';
 
 export const mockHasher = (): Hasher => {
   class HasherStub implements Hasher {

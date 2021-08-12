@@ -1,15 +1,11 @@
-import { LoadAccountByTokenRepository } from '@src/data/protocols';
-import { AccountModel } from '@src/domain/models';
-import { mockAccount } from '@test-suite/domain';
+import { UpdateForgotPasswordAccessTokenRepository } from '@src/data/protocols';
 
-export const mockLoadAccountByTokenRepository =
-  (): LoadAccountByTokenRepository => {
-    class LoadAccountByTokenRepositoryStub
-      implements LoadAccountByTokenRepository
+export const mockUdateForgotPasswordAccessTokenRepository =
+  (): UpdateForgotPasswordAccessTokenRepository => {
+    class UpdateForgotPasswordAccessTokenRepositoryStub
+      implements UpdateForgotPasswordAccessTokenRepository
     {
-      async loadByToken(accessToken: string): Promise<AccountModel> {
-        return Promise.resolve(mockAccount());
-      }
+      async updateForgotPasswordToken(): Promise<void> {}
     }
-    return new LoadAccountByTokenRepositoryStub();
+    return new UpdateForgotPasswordAccessTokenRepositoryStub();
   };

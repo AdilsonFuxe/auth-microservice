@@ -3,3 +3,4 @@ export * from './mock-load-account-by-email-repository';
 export * from './mock-criptography';
 export * from './mock-load-account-by-id-repository';
 export * from './mock-load-account-by-token-repository';
+export * from './mock-update-forgot-password-access-token-repository';
