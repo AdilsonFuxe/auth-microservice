@@ -8,10 +8,10 @@ import {
 import { ContactInUseError } from '../errors';
 import {
   badRequest,
+  created,
   forbidden,
-  ok,
   serverError,
-} from '../helpers/http/http-helper';
+} from '@src/presentation/helpers/http/http-helper';
 
 export class SignUpController implements Controller {
   constructor(
@@ -40,7 +40,7 @@ export class SignUpController implements Controller {
         email: account.email,
         password: account.password,
       });
-      return ok({ accessToken });
+      return created({ accessToken });
     } catch (error) {
       return serverError(error);
     }

@@ -3,8 +3,8 @@ import { SignUpController } from '@src/presentation/controllers/signup-controlle
 import { ContactInUseError, MissingParamError } from '@src/presentation/errors';
 import {
   badRequest,
+  created,
   forbidden,
-  ok,
   serverError,
 } from '@src/presentation/helpers/http/http-helper';
 import { HttpRequest, Validation } from '@src/presentation/protocols';
@@ -115,6 +115,6 @@ describe('SignUpController', () => {
   test('Should return 201 if valid data is provided', async () => {
     const { sut } = makeSut();
     const httpResonse = await sut.handle(mockHttpRequest());
-    expect(httpResonse).toEqual(ok({ accessToken: 'any_access_token' }));
+    expect(httpResonse).toEqual(created({ accessToken: 'any_access_token' }));
   });
 });
