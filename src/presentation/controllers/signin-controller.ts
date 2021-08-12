@@ -5,7 +5,11 @@ import {
   HttpResponse,
   Validation,
 } from '@src/presentation/protocols';
-import { badRequest, serverError } from '../helpers/http/http-helper';
+import {
+  badRequest,
+  serverError,
+  unauthorized,
+} from '../helpers/http/http-helper';
 
 export class SignInController implements Controller {
   constructor(
@@ -19,10 +23,10 @@ export class SignInController implements Controller {
         return badRequest(error);
       }
       const { email, password } = httpRequest.body;
-      await this.authentication.auth({
-        email,
-        password,
-      });
+      const accessToken = await this.authentication.auth({ email, password });
+      if (!accessToken) {
+        return unauthorized();
+      }
     } catch (error) {
       return serverError(error);
     }

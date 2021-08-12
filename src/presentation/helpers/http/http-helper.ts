@@ -1,5 +1,5 @@
 import { HttpResponse, HttpStatusCode } from '@src/presentation/protocols';
-import { ServerError } from '@src/presentation/errors';
+import { ServerError, UnauthorizedError } from '@src/presentation/errors';
 
 export const badRequest = (error: Error): HttpResponse => ({
   statusCode: HttpStatusCode.badRequest,
@@ -24,4 +24,9 @@ export const ok = (data: any): HttpResponse => ({
 export const created = (data: any): HttpResponse => ({
   statusCode: HttpStatusCode.created,
   body: data,
+});
+
+export const unauthorized = (): HttpResponse => ({
+  statusCode: 401,
+  body: new UnauthorizedError(),
 });
