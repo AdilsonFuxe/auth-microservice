@@ -13,4 +13,13 @@ describe('CompareFieldValidation', () => {
     });
     expect(error).toEqual(new InvalidParamError('passwordConfirmation'));
   });
+
+  it('Should not returns if validation succeeds', () => {
+    const sut = makeSut();
+    const error = sut.validate({
+      password: '12354',
+      passwordConfirmation: '12354',
+    });
+    expect(error).toBeFalsy();
+  });
 });
