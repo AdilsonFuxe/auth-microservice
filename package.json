@@ -4,6 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start": "node dist/main/server.js",
+    "build": "rimraf dist && tsc -p tsconfig-build.json",
     "test": "jest --passWithNoTests --silent --noStackTrace --runInBand",
     "test:verbose": "jest --passWithNoTests --runInBand",
     "test:unit": "npm test -- --passWithNoTests --watch -c jest-unit-config.ts",
@@ -39,6 +41,7 @@
     "jest": "^27.0.6",
     "lint-staged": "^11.1.2",
     "prettier": "^2.3.2",
+    "rimraf": "^3.0.2",
     "supertest": "^6.1.5",
     "ts-jest": "^27.0.4",
     "ts-node": "^10.2.0",

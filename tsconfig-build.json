@@ -1,0 +1,9 @@
+{
+  "extends": "./tsconfig.json",
+  "include": [
+    "src"
+  ],
+  "exclude": [
+    "__tests__", "test-suite", "jest-integration-config.ts", "jest-unit-config.ts", "jest.config.ts", "globalConfig.json"
+  ]
+}
