@@ -48,7 +48,11 @@
     "bcrypt": "^5.0.1",
     "express": "^4.17.1",
     "jsonwebtoken": "^8.5.1",
+    "module-alias": "^2.2.2",
     "mongoose": "^5.13.6",
     "validator": "^13.6.0"
+  },
+  "_moduleAliases": {
+    "@src": "dist"
   }
 }
