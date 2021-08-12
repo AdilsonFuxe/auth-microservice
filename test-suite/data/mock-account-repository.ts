@@ -3,7 +3,7 @@ import {
   UpdateAcessTokenRepository,
 } from '@/src/data/protocols';
 import { AccountModel } from '@/src/domain/models';
-import { mockAccount } from '../domain';
+import { mockAccount } from '@/test-suite/domain';
 
 export const mockAddAccountRepositoryStub = (): AddAccountRepository => {
   class AddAccountRepositoryStub implements AddAccountRepository {
@@ -17,7 +17,7 @@ export const mockAddAccountRepositoryStub = (): AddAccountRepository => {
 export const mockUpdateAccessTokenRepository =
   (): UpdateAcessTokenRepository => {
     class UpdateAcessTokenRepositoryStub implements UpdateAcessTokenRepository {
-      async updateAcessToken(): Promise<void> {
+      async updateAccessToken(): Promise<void> {
         return Promise.resolve();
       }
     }

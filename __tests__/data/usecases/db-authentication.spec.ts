@@ -107,34 +107,43 @@ describe('DbAuthentication Usecase', () => {
     expect(accessToken).toBeNull();
   });
 
-  test('Should throw if HashComparer throws', async () => {
+  it('Should throw if HashComparer throws', async () => {
     const { sut, hashComparerStub } = makeSut();
     jest.spyOn(hashComparerStub, 'compare').mockImplementationOnce(trhowError);
     const promise = sut.auth(mockAuthenticationParams());
     await expect(promise).rejects.toThrow();
   });
 
-  test('Should call Encrypter with correct id', async () => {
+  it('Should call Encrypter with correct id', async () => {
     const { sut, encrypterStub } = makeSut();
     const encryptSpy = jest.spyOn(encrypterStub, 'encrypt');
     await sut.auth(mockAuthenticationParams());
     expect(encryptSpy).toHaveBeenCalledWith('valid_id');
   });
 
-  test('Should throw if Encrypter throws', async () => {
+  it('Should throw if Encrypter throws', async () => {
     const { sut, encrypterStub } = makeSut();
     jest.spyOn(encrypterStub, 'encrypt').mockImplementationOnce(trhowError);
     const promise = sut.auth(mockAuthenticationParams());
     await expect(promise).rejects.toThrow();
   });
 
-  test('Should call UpdateAcessTokenRepository with correct values', async () => {
+  it('Should call UpdateAcessTokenRepository with correct values', async () => {
     const { sut, updateAcessTokenRepositoryStub } = makeSut();
     const updateSpy = jest.spyOn(
       updateAcessTokenRepositoryStub,
-      'updateAcessToken'
+      'updateAccessToken'
     );
     await sut.auth(mockAuthenticationParams());
     expect(updateSpy).toHaveBeenCalledWith('valid_id', 'any_token');
+  });
+
+  it('Should throw if UpdateAcessTokenRepository throws', async () => {
+    const { sut, updateAcessTokenRepositoryStub } = makeSut();
+    jest
+      .spyOn(updateAcessTokenRepositoryStub, 'updateAccessToken')
+      .mockImplementationOnce(trhowError);
+    const promise = sut.auth(mockAuthenticationParams());
+    await expect(promise).rejects.toThrow();
   });
 });
