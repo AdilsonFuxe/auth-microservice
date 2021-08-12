@@ -3,6 +3,7 @@ import { SignInController } from '@src/presentation/controllers/signin-controlle
 import { MissingParamError } from '@src/presentation/errors';
 import {
   badRequest,
+  ok,
   serverError,
   unauthorized,
 } from '@src/presentation/helpers/http/http-helper';
@@ -79,5 +80,11 @@ describe('SignIn Controller', () => {
       .mockReturnValueOnce(Promise.resolve(null));
     const httpResponse = await sut.handle(mockHttpRequest());
     expect(httpResponse).toEqual(unauthorized());
+  });
+
+  it('Should return 200 if valid credentials are provided', async () => {
+    const { sut } = makeSut();
+    const httpResponse = await sut.handle(mockHttpRequest());
+    expect(httpResponse).toEqual(ok({ accessToken: 'any_access_token' }));
   });
 });
