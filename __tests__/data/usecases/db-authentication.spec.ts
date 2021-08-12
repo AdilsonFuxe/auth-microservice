@@ -64,11 +64,11 @@ describe('DbAuthentication Usecase', () => {
     await expect(promise).rejects.toThrow();
   });
 
-  it('Should return null if loadAccountByEmailRepositoryStub returns an account', async () => {
+  it('Should return null if loadAccountByEmailRepositoryStub returns null', async () => {
     const { sut, loadAccountByEmailRepositoryStub } = makeSut();
     jest
       .spyOn(loadAccountByEmailRepositoryStub, 'loadByEmail')
-      .mockReturnValueOnce(Promise.resolve(mockAccount()));
+      .mockReturnValueOnce(Promise.resolve(null));
     const accessToken = await sut.auth(mockAuthenticationParams());
     expect(accessToken).toBeNull();
   });
@@ -145,5 +145,11 @@ describe('DbAuthentication Usecase', () => {
       .mockImplementationOnce(trhowError);
     const promise = sut.auth(mockAuthenticationParams());
     await expect(promise).rejects.toThrow();
+  });
+
+  it('Should return an token on sucess', async () => {
+    const { sut } = makeSut();
+    const accessToken = await sut.auth(mockAuthenticationParams());
+    expect(accessToken).toBe('any_token');
   });
 });
