@@ -5,3 +5,4 @@ export * from './db/load-account-by-id-repository';
 export * from './criptography/hasher';
 export * from './criptography/hash-comparer';
 export * from './criptography/encrypter';
+export * from './criptography/decrypter';
