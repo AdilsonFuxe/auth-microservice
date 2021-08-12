@@ -1,6 +1,7 @@
-import { MongoHelper } from '@src/infra/db/mongoose/helper/mongo-helper';
 import { AccountMongooseModel } from '@src/infra/db/mongoose/models';
 import { hash } from 'bcrypt';
+import env from '@src/main/config/env';
+import { sign } from 'jsonwebtoken';
 import faker from 'faker';
 
 export const trhowError = (): never => {
@@ -10,6 +11,7 @@ export const trhowError = (): never => {
 export type mockCreateAccountResponse = {
   email: string;
   password: string;
+  accountId: string;
 };
 
 export const mockCreateAccountOnDb =
@@ -24,5 +26,12 @@ export const mockCreateAccountOnDb =
       password: hashed_password,
     });
     await doc.save();
-    return { email, password };
+    return { email, password, accountId: doc._id };
   };
+
+export const mockAuthenticateUser = async (): Promise<string> => {
+  const { accountId } = await mockCreateAccountOnDb();
+  const accessToken = sign({ accountId }, env.jwtSecret);
+  await AccountMongooseModel.updateOne({ _id: accountId }, { accessToken });
+  return accessToken;
+};
