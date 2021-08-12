@@ -4,6 +4,7 @@ import {
   HashComparer,
   Hasher,
 } from '@src/data/protocols';
+import { GenerateAccessToken } from '@src/data/protocols/criptography/generate-accessToken';
 
 export const mockHasher = (): Hasher => {
   class HasherStub implements Hasher {
@@ -40,4 +41,13 @@ export const mockDecrypter = (): Decrypter => {
     }
   }
   return new DecrypterStub();
+};
+
+export const mockGenerateAccessToken = (): GenerateAccessToken => {
+  class GenerateAccessTokenStub implements GenerateAccessToken {
+    generate(): number {
+      return 123456;
+    }
+  }
+  return new GenerateAccessTokenStub();
 };
