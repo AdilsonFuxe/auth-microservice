@@ -8,6 +8,7 @@ import {
   mockUdateForgotPasswordAccessTokenRepository,
 } from '@test-suite/data';
 import { trhowError } from '@test-suite/helper';
+import mockDate from 'mockdate';
 
 type SutTypes = {
   sut: DbForgotPassword;
@@ -31,6 +32,14 @@ const makeSut = (): SutTypes => {
 };
 
 describe('DbForgotPassword UseCase', () => {
+  beforeAll(() => {
+    mockDate.set(new Date());
+  });
+
+  afterAll(() => {
+    mockDate.reset();
+  });
+
   it('Should call GenerateAccessToken', async () => {
     const { sut, generateAccessTokenSub } = makeSut();
     const generateSpy = jest.spyOn(generateAccessTokenSub, 'generate');
@@ -60,5 +69,17 @@ describe('DbForgotPassword UseCase', () => {
       accessToken: 123456,
       expiresIn,
     });
+  });
+
+  it('Should throw if UpdateForgotPasswordAccessTokenRepository throws', async () => {
+    const { sut, updateForgotPasswordTokenRepositoryStub } = makeSut();
+    jest
+      .spyOn(
+        updateForgotPasswordTokenRepositoryStub,
+        'updateForgotPasswordToken'
+      )
+      .mockImplementationOnce(trhowError);
+    const promise = sut.forgot('any_id');
+    await expect(promise).rejects.toThrow();
   });
 });
