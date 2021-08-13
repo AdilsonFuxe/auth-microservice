@@ -6,6 +6,7 @@ import {
 } from '@src/presentation/protocols';
 import {
   badRequest,
+  notFounError,
   serverError,
 } from '@src/presentation/helpers/http/http-helper';
 import { LoadAccountByEmail } from '@src/domain/usecases/load-account-by-email';
@@ -23,7 +24,10 @@ export class ResetPasswordController implements Controller {
         return badRequest(error);
       }
       const { email, accessToken, password } = httpRequest.body;
-      await this.loadAccountByEmail.loadByEmail(email);
+      const account = await this.loadAccountByEmail.loadByEmail(email);
+      if (!account) {
+        return notFounError('email');
+      }
     } catch (error) {
       return serverError(error);
     }
