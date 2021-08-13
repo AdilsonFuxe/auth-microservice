@@ -12,6 +12,7 @@
     "test:integration": "npm test -- --passWithNoTests --watch -c jest-integration-config.ts",
     "test:staged": "npm test -- --findRelatedTests",
     "test:ci": "npm test -- --coverage",
+    "test:coveralls": "npm run test:ci && coveralls < coverage/lcov.info",
     "prepare": "husky install"
   },
   "keywords": [],
@@ -29,6 +30,7 @@
     "@types/supertest": "^2.0.11",
     "@types/validator": "^13.6.3",
     "@typescript-eslint/eslint-plugin": "^4.29.1",
+    "coveralls": "^3.1.1",
     "eslint": "^7.32.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-config-standard-with-typescript": "^20.0.0",
@@ -57,6 +59,9 @@
     "mongoose": "^5.13.6",
     "nodemailer": "^6.6.3",
     "validator": "^13.6.0"
+  },
+  "engines": {
+    "node": "14.x"
   },
   "_moduleAliases": {
     "@src": "dist"
