@@ -190,3 +190,20 @@ yarn test
   "email": "any_mail@mail.com"
 }
 ```
+
+**Patch** `https:/localhost/api/v1/reset-password`
+
+##### output example
+
+#####
+
+```json
+// Patch https:/localhost/api/v1/reset-password
+
+// Request Body
+{
+  "email": "any_mail@mail.com",
+  "accessToken": 092498,
+  "password": "new_password"
+}
+```
