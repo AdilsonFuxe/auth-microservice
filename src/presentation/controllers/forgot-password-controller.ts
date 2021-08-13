@@ -1,5 +1,6 @@
 import { ForgotPassword } from '@src/domain/usecases/forgot-password';
 import { LoadAccountByEmail } from '@src/domain/usecases/load-account-by-email';
+import { SendMail } from '@src/domain/usecases/send-mail';
 import {
   badRequest,
   notFounError,
@@ -16,7 +17,8 @@ export class ForgotPasswordController implements Controller {
   constructor(
     private readonly validation: Validation,
     private readonly loadAccountByEmail: LoadAccountByEmail,
-    private readonly forgotPassword: ForgotPassword
+    private readonly forgotPassword: ForgotPassword,
+    private readonly sendMail: SendMail
   ) {}
 
   async handle(httpRequest: HttpRequest): Promise<HttpResponse> {
@@ -30,7 +32,12 @@ export class ForgotPasswordController implements Controller {
       if (!account) {
         return notFounError('email');
       }
-      await this.forgotPassword.forgot(account.id);
+      const { accessToken } = await this.forgotPassword.forgot(account.id);
+      await this.sendMail.sendMail({
+        to: email,
+        subject: 'Forgot password ✔',
+        text: `Have you forgotten your password? no problem, use the token to change ${accessToken}`,
+      });
     } catch (error) {
       return serverError(error);
     }
