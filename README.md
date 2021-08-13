@@ -1,3 +1,6 @@
+[![Build Status](https://travis-ci.com/AdilsonFuxe/clean-auth-microservice.svg?branch=main)](https://travis-ci.com/AdilsonFuxe/clean-auth-microservice)
+[![Coverage Status](https://coveralls.io/repos/github/AdilsonFuxe/clean-auth-microservice/badge.svg?branch=main)](https://coveralls.io/github/AdilsonFuxe/clean-auth-microservice?branch=main)
+
 <!-- PROJECT LOGO -->
 <br />
 <p align="center">
