@@ -1,3 +1,4 @@
+import { ForgotPassword } from '@src/domain/usecases/forgot-password';
 import { LoadAccountByEmail } from '@src/domain/usecases/load-account-by-email';
 import {
   badRequest,
@@ -14,7 +15,8 @@ import {
 export class ForgotPasswordController implements Controller {
   constructor(
     private readonly validation: Validation,
-    private readonly loadAccountByEmail: LoadAccountByEmail
+    private readonly loadAccountByEmail: LoadAccountByEmail,
+    private readonly forgotPassword: ForgotPassword
   ) {}
 
   async handle(httpRequest: HttpRequest): Promise<HttpResponse> {
@@ -28,6 +30,7 @@ export class ForgotPasswordController implements Controller {
       if (!account) {
         return notFounError('email');
       }
+      await this.forgotPassword.forgot(account.id);
     } catch (error) {
       return serverError(error);
     }
