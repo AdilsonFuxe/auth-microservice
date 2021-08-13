@@ -19,11 +19,15 @@ export const mockCreateAccountOnDb =
     const email = faker.internet.email();
     const password = faker.internet.password();
     const hashed_password = await hash(password, 12);
+    const date = new Date();
+    date.setMinutes(date.getMinutes() + 5);
     const doc = new AccountMongooseModel({
       firstName: faker.name.firstName(),
       lastName: faker.name.lastName(),
       email,
       password: hashed_password,
+      forgotPasswordAccessToken: 123456,
+      forgotPasswordExpiresIn: date,
     });
     await doc.save();
     return { email, password, accountId: doc._id };
