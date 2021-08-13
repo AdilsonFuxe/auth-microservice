@@ -8,9 +8,13 @@ import {
   badRequest,
   serverError,
 } from '@src/presentation/helpers/http/http-helper';
+import { LoadAccountByEmail } from '@src/domain/usecases/load-account-by-email';
 
 export class ResetPasswordController implements Controller {
-  constructor(private readonly validation: Validation) {}
+  constructor(
+    private readonly validation: Validation,
+    private readonly loadAccountByEmail: LoadAccountByEmail
+  ) {}
 
   async handle(httpRequest: HttpRequest): Promise<HttpResponse> {
     try {
@@ -18,6 +22,8 @@ export class ResetPasswordController implements Controller {
       if (error) {
         return badRequest(error);
       }
+      const { email, accessToken, password } = httpRequest.body;
+      await this.loadAccountByEmail.loadByEmail(email);
     } catch (error) {
       return serverError(error);
     }
