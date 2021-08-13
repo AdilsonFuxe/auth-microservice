@@ -10,7 +10,7 @@ import {
   serverError,
 } from '@src/presentation/helpers/http/http-helper';
 import { LoadAccountByEmail } from '@src/domain/usecases/load-account-by-email';
-import { InvalidAccessTokenError } from '../errors';
+import { InvalidAccessTokenError, TokenExpiredError } from '../errors';
 
 export class ResetPasswordController implements Controller {
   constructor(
@@ -31,6 +31,10 @@ export class ResetPasswordController implements Controller {
       }
       if (account.forgotPasswordAccessToken !== accessToken) {
         return badRequest(new InvalidAccessTokenError());
+      }
+      const now = new Date();
+      if (now > account.forgotPasswordExpiresIn) {
+        return badRequest(new TokenExpiredError());
       }
     } catch (error) {
       return serverError(error);
