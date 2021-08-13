@@ -5,7 +5,7 @@ import { AccountMongoRepository } from '@src/infra/db/mongoose/repositories';
 
 const makeSut = () => new AccountMongoRepository();
 
-describe('UpdateForgotPasswordAccessTokenMongoRepository', () => {
+describe('UpdatePasswordMongoRepository', () => {
   beforeAll(async () => {
     await MongoHelper.connect(process.env.MONGO_URL as string);
   });
@@ -18,14 +18,18 @@ describe('UpdateForgotPasswordAccessTokenMongoRepository', () => {
   it('Should update password on success', async () => {
     const sut = makeSut();
     const params = mockAddAccountParams();
-    const account = await AccountMongooseModel.create(params);
-    expect(account.forgotPasswordAccessToken).toBeFalsy();
-    expect(account.forgotPasswordExpiresIn).toBeFalsy();
-    const accessToken = 123456;
-    const expiresIn = new Date();
-    await sut.updateForgotPasswordToken(account.id, { accessToken, expiresIn });
+    const account = await AccountMongooseModel.create({
+      forgotPasswordAccessToken: 123456,
+      forgotPasswordExpiresIn: new Date(),
+      ...params,
+    });
+    expect(account.password).toBe(params.password);
+    expect(account.forgotPasswordExpiresIn).toBeTruthy();
+    expect(account.forgotPasswordAccessToken).toBeTruthy();
+    await sut.updatePassword(account.id, 'updatedPassword');
     const result = await AccountMongooseModel.findById(account.id);
-    expect(result.forgotPasswordAccessToken).toBe(accessToken);
-    expect(result.forgotPasswordExpiresIn).toEqual(expiresIn);
+    expect(result.password).toBe('updatedPassword');
+    expect(result.forgotPasswordExpiresIn).toBeNull();
+    expect(result.forgotPasswordAccessToken).toBeNull();
   });
 });
