@@ -22,6 +22,8 @@ export const mockAccount = (): AccountModel => ({
   email: 'valid_email',
   password: 'valid_password',
   accessToken: 'valid_accessToken',
+  forgotPasswordAccessToken: 123456,
+  forgotPasswordExpiresIn: new Date(),
 });
 
 export const mockForgotPasswordResponse = (): ForgotPasswordResponse => ({

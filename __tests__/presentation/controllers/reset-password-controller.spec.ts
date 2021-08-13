@@ -1,11 +1,15 @@
 import { LoadAccountByEmail } from '@src/domain/usecases/load-account-by-email';
 import { ResetPasswordController } from '@src/presentation/controllers/reset-password-controller';
-import { MissingParamError } from '@src/presentation/errors';
+import {
+  InvalidAccessTokenError,
+  MissingParamError,
+} from '@src/presentation/errors';
 import {
   badRequest,
   notFounError,
 } from '@src/presentation/helpers/http/http-helper';
 import { HttpRequest, Validation } from '@src/presentation/protocols';
+import { mockAccount } from '@test-suite/domain';
 import {
   mockLoadAccountByEmail,
   mockValidationStub,
@@ -14,7 +18,7 @@ import {
 const mockHttpRequest = (): HttpRequest => ({
   body: {
     email: 'any_email@mail.com',
-    accessToken: 'any_access_token',
+    accessToken: 123456,
     password: 'new_password',
   },
 });
@@ -72,5 +76,19 @@ describe('ReserPassword Controller', () => {
       .mockReturnValueOnce(Promise.resolve(null));
     const httpResponse = await sut.handle(mockHttpRequest());
     expect(httpResponse).toEqual(notFounError('email'));
+  });
+
+  it('Should return 400 if an invalid accessToken is provided', async () => {
+    const { sut, loadAccountByEmailStub } = makeSut();
+    const { forgotPasswordAccessToken, ...accountWithoutAccessToken } =
+      mockAccount();
+    jest.spyOn(loadAccountByEmailStub, 'loadByEmail').mockReturnValueOnce(
+      Promise.resolve({
+        forgotPasswordAccessToken: 240998,
+        ...accountWithoutAccessToken,
+      })
+    );
+    const httpResponse = await sut.handle(mockHttpRequest());
+    expect(httpResponse).toEqual(badRequest(new InvalidAccessTokenError()));
   });
 });
