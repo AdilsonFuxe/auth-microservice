@@ -1,3 +1,4 @@
+import { ForgotPassword } from '@src/domain/usecases/forgot-password';
 import { LoadAccountByEmail } from '@src/domain/usecases/load-account-by-email';
 import { ForgotPasswordController } from '@src/presentation/controllers/forgot-password-controller';
 import { MissingParamError } from '@src/presentation/errors';
@@ -9,6 +10,7 @@ import {
 import { HttpRequest, Validation } from '@src/presentation/protocols';
 import { trhowError } from '@test-suite/helper';
 import {
+  mockForgotPassword,
   mockLoadAccountByEmail,
   mockValidationStub,
 } from '@test-suite/presentation';
@@ -23,19 +25,23 @@ type SutTypes = {
   sut: ForgotPasswordController;
   validationStub: Validation;
   loadAccountByEmailStub: LoadAccountByEmail;
+  forgotPasswordStub: ForgotPassword;
 };
 
 const makeSut = (): SutTypes => {
   const validationStub = mockValidationStub();
   const loadAccountByEmailStub = mockLoadAccountByEmail();
+  const forgotPasswordStub = mockForgotPassword();
   const sut = new ForgotPasswordController(
     validationStub,
-    loadAccountByEmailStub
+    loadAccountByEmailStub,
+    forgotPasswordStub
   );
   return {
     sut,
     validationStub,
     loadAccountByEmailStub,
+    forgotPasswordStub,
   };
 };
 
@@ -81,5 +87,13 @@ describe('ForgotPassword Controller', () => {
       .mockImplementationOnce(trhowError);
     const httpResonse = await sut.handle(mockHttpRequest());
     expect(httpResonse).toEqual(serverError(new Error()));
+  });
+
+  it('Should call ForgotPassword with correct id', async () => {
+    const { sut, forgotPasswordStub } = makeSut();
+    const forgotSpy = jest.spyOn(forgotPasswordStub, 'forgot');
+    const httpRequest = mockHttpRequest();
+    await sut.handle(httpRequest);
+    expect(forgotSpy).toHaveBeenCalledWith('valid_id');
   });
 });
