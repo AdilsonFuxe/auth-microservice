@@ -2,7 +2,11 @@ import { NodeMailerAdapter } from '@src/infra/remote/node-mailer-adapter';
 import { mockSendMailParams } from '@test-suite/domain';
 import nodemailer from 'nodemailer';
 
-jest.mock('nodemailer');
+jest.mock('nodemailer', () => ({
+  createTransport: jest.fn().mockReturnValue({
+    sendMail: jest.fn().mockReturnValue((mailoptions, callback) => {}),
+  }),
+}));
 
 const mockedNodeMailer = nodemailer as jest.Mocked<typeof nodemailer>;
 
@@ -21,5 +25,16 @@ describe('NodeMailerAdapter', () => {
         pass: 'any_pass',
       },
     });
+  });
+
+  it('Should call send Mail with correct values', async () => {
+    const sendMailSpy = jest.spyOn(
+      mockedNodeMailer.createTransport(),
+      'sendMail'
+    );
+    const sut = makeSut();
+    const params = mockSendMailParams();
+    await sut.sendMail(params);
+    expect(sendMailSpy).toHaveBeenCalledWith(params);
   });
 });
