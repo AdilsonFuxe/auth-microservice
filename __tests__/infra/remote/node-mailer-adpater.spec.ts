@@ -17,7 +17,13 @@ type SutTypes = {
 
 const makeSut = (): SutTypes => {
   const mockedNodeMailer = mockNodeMailer();
-  const sut = new NodeMailerAdapter('localhost', 1234, 'any_user', 'any_pass');
+  const sut = new NodeMailerAdapter(
+    'server.mail@mail.com',
+    'localhost',
+    1234,
+    'any_user',
+    'any_pass'
+  );
   return { sut, mockedNodeMailer };
 };
 
@@ -43,7 +49,10 @@ describe('NodeMailerAdapter', () => {
     );
     const params = mockSendMailParams();
     await sut.sendMail(params);
-    expect(sendMailSpy).toHaveBeenCalledWith(params);
+    expect(sendMailSpy).toHaveBeenCalledWith({
+      from: 'server.mail@mail.com',
+      ...params,
+    });
   });
 
   it('Should throw if  send Mail throw', async () => {

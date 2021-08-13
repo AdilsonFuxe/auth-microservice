@@ -1,4 +1,7 @@
-import { ForgotPassword } from '@src/domain/usecases/forgot-password';
+import {
+  ForgotPassword,
+  ForgotPasswordResponse,
+} from '@src/domain/usecases/forgot-password';
 import {
   GenerateAccessToken,
   UpdateForgotPasswordAccessTokenRepository,
@@ -10,16 +13,21 @@ export class DbForgotPassword implements ForgotPassword {
     private readonly updateForgotPasswordAccessTokenRepository: UpdateForgotPasswordAccessTokenRepository
   ) {}
 
-  async forgot(id: string): Promise<void> {
+  async forgot(id: string): Promise<ForgotPasswordResponse> {
     const accessToken = this.generateAccessToken.generate();
     const expiresIn = new Date();
     expiresIn.setMinutes(expiresIn.getMinutes() + 5);
-    await this.updateForgotPasswordAccessTokenRepository.updateForgotPasswordToken(
-      id,
-      {
-        accessToken,
-        expiresIn,
-      }
-    );
+    const result =
+      await this.updateForgotPasswordAccessTokenRepository.updateForgotPasswordToken(
+        id,
+        {
+          accessToken,
+          expiresIn,
+        }
+      );
+    return {
+      accessToken: result.forgotPasswordAccessToken,
+      expiresIn: result.forgotPasswordExpiresIn,
+    };
   }
 }

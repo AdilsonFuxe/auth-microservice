@@ -50,10 +50,15 @@ export class AccountMongoRepository
   async updateForgotPasswordToken(
     id: string,
     params: UpdateForgotPasswordAccessTokenParams
-  ): Promise<void> {
-    await AccountMongooseModel.findByIdAndUpdate(id, {
-      forgotPasswordAccessToken: params.accessToken,
-      forgotPasswordExpiresIn: params.expiresIn,
-    });
+  ): Promise<AccountModel> {
+    const account = await AccountMongooseModel.findByIdAndUpdate(
+      id,
+      {
+        forgotPasswordAccessToken: params.accessToken,
+        forgotPasswordExpiresIn: params.expiresIn,
+      },
+      { new: true }
+    ).lean();
+    return MongoHelper.serialize(account);
   }
 }

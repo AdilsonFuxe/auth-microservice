@@ -1,5 +1,6 @@
 import { AccountModel } from '@src/domain/models';
 import { AddAccountParams, AuthenticationParams } from '@src/domain/usecases';
+import { ForgotPasswordResponse } from '@src/domain/usecases/forgot-password';
 import faker from 'faker';
 
 export const mockAddAccountParams = (): AddAccountParams => ({
@@ -21,4 +22,9 @@ export const mockAccount = (): AccountModel => ({
   email: 'valid_email',
   password: 'valid_password',
   accessToken: 'valid_accessToken',
+});
+
+export const mockForgotPasswordResponse = (): ForgotPasswordResponse => ({
+  accessToken: 123456,
+  expiresIn: new Date(),
 });

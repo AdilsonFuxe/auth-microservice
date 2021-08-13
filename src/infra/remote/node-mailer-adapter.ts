@@ -4,6 +4,7 @@ import nodemailer from 'nodemailer';
 
 export class NodeMailerAdapter implements NodeMailerSendMail {
   constructor(
+    private readonly from: string,
     private readonly host: string,
     private readonly port: number,
     private readonly user: string,
@@ -18,6 +19,11 @@ export class NodeMailerAdapter implements NodeMailerSendMail {
         pass: this.pass,
       },
     });
-    await transport.sendMail(params);
+    await transport.sendMail({
+      from: this.from,
+      to: params.to,
+      subject: params.subject,
+      text: params.text,
+    });
   }
 }
