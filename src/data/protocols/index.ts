@@ -4,6 +4,7 @@ export * from './db/update-acess-token-repository';
 export * from './db/load-account-by-id-repository';
 export * from './db/load-account-by-token-repository';
 export * from './db/update-forgot-password-token-repository';
+export * from './db/update-password-repository';
 export * from './criptography/hasher';
 export * from './criptography/hash-comparer';
 export * from './criptography/encrypter';
