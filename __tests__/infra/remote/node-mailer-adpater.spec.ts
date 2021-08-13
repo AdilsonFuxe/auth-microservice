@@ -1,5 +1,7 @@
 import { NodeMailerAdapter } from '@src/infra/remote/node-mailer-adapter';
+import { mockNodeMailer } from '@test-suite/data';
 import { mockSendMailParams } from '@test-suite/domain';
+import { trhowError } from '@test-suite/helper';
 import nodemailer from 'nodemailer';
 
 jest.mock('nodemailer', () => ({
@@ -8,14 +10,20 @@ jest.mock('nodemailer', () => ({
   }),
 }));
 
-const mockedNodeMailer = nodemailer as jest.Mocked<typeof nodemailer>;
+type SutTypes = {
+  sut: NodeMailerAdapter;
+  mockedNodeMailer: jest.Mocked<typeof nodemailer>;
+};
 
-const makeSut = (): NodeMailerAdapter =>
-  new NodeMailerAdapter('localhost', 1234, 'any_user', 'any_pass');
+const makeSut = (): SutTypes => {
+  const mockedNodeMailer = mockNodeMailer();
+  const sut = new NodeMailerAdapter('localhost', 1234, 'any_user', 'any_pass');
+  return { sut, mockedNodeMailer };
+};
 
 describe('NodeMailerAdapter', () => {
   it('Should call create transport with correct values', async () => {
-    const sut = makeSut();
+    const { sut, mockedNodeMailer } = makeSut();
     await sut.sendMail(mockSendMailParams());
     expect(mockedNodeMailer.createTransport).toHaveBeenCalledWith({
       host: 'localhost',
@@ -28,13 +36,22 @@ describe('NodeMailerAdapter', () => {
   });
 
   it('Should call send Mail with correct values', async () => {
+    const { sut, mockedNodeMailer } = makeSut();
     const sendMailSpy = jest.spyOn(
       mockedNodeMailer.createTransport(),
       'sendMail'
     );
-    const sut = makeSut();
     const params = mockSendMailParams();
     await sut.sendMail(params);
     expect(sendMailSpy).toHaveBeenCalledWith(params);
+  });
+
+  it('Should throw if  send Mail throw', async () => {
+    const { sut, mockedNodeMailer } = makeSut();
+    jest
+      .spyOn(mockedNodeMailer.createTransport(), 'sendMail')
+      .mockImplementation(trhowError);
+    const promise = sut.sendMail(mockSendMailParams());
+    await expect(promise).rejects.toThrow();
   });
 });
