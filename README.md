@@ -2,10 +2,9 @@
 <br />
 <p align="center">
   <a href="https://github.com/othneildrew/Best-README-Template">
-    <img src="docs/logo.png" alt="Logo" width="80" height="80">
   </a>
 
-  <h3 align="center">Node.js Authentication Microservice</h3>
+  <h1 align="center">Node.js Authentication Microservice</h1>
 
   <!-- <p align="center">
    
@@ -23,7 +22,7 @@
 - [Getting Started](#getting-started)
   - [Prerequisites](#prerequisites)
   - [Installation](#installation)
-- [Endpoints](#end-points)
+- [Endpoints](#endpoints)
 
 <!-- ABOUT THE PROJECT -->
 
