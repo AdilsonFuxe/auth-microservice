@@ -11,11 +11,13 @@ import {
 } from '@src/presentation/helpers/http/http-helper';
 import { LoadAccountByEmail } from '@src/domain/usecases/load-account-by-email';
 import { InvalidAccessTokenError, TokenExpiredError } from '../errors';
+import { UpdatePassword } from '@src/domain/usecases/update-password';
 
 export class ResetPasswordController implements Controller {
   constructor(
     private readonly validation: Validation,
-    private readonly loadAccountByEmail: LoadAccountByEmail
+    private readonly loadAccountByEmail: LoadAccountByEmail,
+    private readonly updatePassword: UpdatePassword
   ) {}
 
   async handle(httpRequest: HttpRequest): Promise<HttpResponse> {
@@ -36,6 +38,7 @@ export class ResetPasswordController implements Controller {
       if (now > account.forgotPasswordExpiresIn) {
         return badRequest(new TokenExpiredError());
       }
+      await this.updatePassword.updatePasseword(account.id, password);
     } catch (error) {
       return serverError(error);
     }
