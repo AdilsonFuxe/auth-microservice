@@ -4,7 +4,9 @@ export type AccountModel = {
   lastName: string;
   email: string;
   password: string;
-  accessToken: string;
+  accessToken?: string;
+  forgotPasswordAccessToken?: number;
+  forgotPasswordExpiresIn?: Date;
   createdAt?: Date;
   updatedAt?: Date;
 };

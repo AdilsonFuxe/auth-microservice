@@ -32,6 +32,12 @@ const AccountSchema = new Schema<AccountDocument>(
     accessToken: {
       type: String,
     },
+    forgotPasswordAccessToken: {
+      type: Number,
+    },
+    forgotPasswordExpiresIn: {
+      type: Date,
+    },
   },
   { timestamps: true }
 );

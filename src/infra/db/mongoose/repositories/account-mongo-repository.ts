@@ -4,6 +4,8 @@ import {
   LoadAccountByIdlRepository,
   LoadAccountByTokenRepository,
   UpdateAcessTokenRepository,
+  UpdateForgotPasswordAccessTokenParams,
+  UpdateForgotPasswordAccessTokenRepository,
 } from '@src/data/protocols';
 import { AccountModel } from '@src/domain/models';
 import { AddAccountParams } from '@src/domain/usecases';
@@ -16,7 +18,8 @@ export class AccountMongoRepository
     LoadAccountByEmailRepository,
     UpdateAcessTokenRepository,
     LoadAccountByIdlRepository,
-    LoadAccountByTokenRepository
+    LoadAccountByTokenRepository,
+    UpdateForgotPasswordAccessTokenRepository
 {
   async add(params: AddAccountParams): Promise<AccountModel> {
     const doc = new AccountMongooseModel(params);
@@ -42,5 +45,15 @@ export class AccountMongoRepository
   async loadByToken(accessToken: string): Promise<AccountModel> {
     const account = await AccountMongooseModel.findOne({ accessToken }).lean();
     return MongoHelper.serialize(account);
+  }
+
+  async updateForgotPasswordToken(
+    id: string,
+    params: UpdateForgotPasswordAccessTokenParams
+  ): Promise<void> {
+    await AccountMongooseModel.findByIdAndUpdate(id, {
+      forgotPasswordAccessToken: params.accessToken,
+      forgotPasswordExpiresIn: params.expiresIn,
+    });
   }
 }
