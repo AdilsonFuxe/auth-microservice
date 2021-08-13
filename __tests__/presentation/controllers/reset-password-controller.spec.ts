@@ -3,6 +3,7 @@ import { ResetPasswordController } from '@src/presentation/controllers/reset-pas
 import {
   InvalidAccessTokenError,
   MissingParamError,
+  TokenExpiredError,
 } from '@src/presentation/errors';
 import {
   badRequest,
@@ -90,5 +91,24 @@ describe('ReserPassword Controller', () => {
     );
     const httpResponse = await sut.handle(mockHttpRequest());
     expect(httpResponse).toEqual(badRequest(new InvalidAccessTokenError()));
+  });
+
+  it('Should return 400 if provided access token is expired', async () => {
+    const { sut, loadAccountByEmailStub } = makeSut();
+    const { forgotPasswordExpiresIn, ...accountWithoutExpiresIn } =
+      mockAccount();
+
+    const date = new Date();
+    date.setMinutes(date.getMinutes() - 10);
+
+    mockAccount();
+    jest.spyOn(loadAccountByEmailStub, 'loadByEmail').mockReturnValueOnce(
+      Promise.resolve({
+        forgotPasswordExpiresIn: date,
+        ...accountWithoutExpiresIn,
+      })
+    );
+    const httpResponse = await sut.handle(mockHttpRequest());
+    expect(httpResponse).toEqual(badRequest(new TokenExpiredError()));
   });
 });
