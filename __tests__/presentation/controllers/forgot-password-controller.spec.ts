@@ -1,7 +1,10 @@
 import { LoadAccountByEmail } from '@src/domain/usecases/load-account-by-email';
 import { ForgotPasswordController } from '@src/presentation/controllers/forgot-password-controller';
 import { MissingParamError } from '@src/presentation/errors';
-import { badRequest } from '@src/presentation/helpers/http/http-helper';
+import {
+  badRequest,
+  notFounError,
+} from '@src/presentation/helpers/http/http-helper';
 import { HttpRequest, Validation } from '@src/presentation/protocols';
 import {
   mockLoadAccountByEmail,
@@ -58,5 +61,14 @@ describe('ForgotPassword Controller', () => {
     const httpRequest = mockHttpRequest();
     await sut.handle(httpRequest);
     expect(loadByEmailSpy).toHaveBeenCalledWith('any_email@mail.com');
+  });
+
+  it('Should return 404 if an invalid email is provided', async () => {
+    const { sut, loadAccountByEmailStub } = makeSut();
+    jest
+      .spyOn(loadAccountByEmailStub, 'loadByEmail')
+      .mockReturnValueOnce(Promise.resolve(null));
+    const httpResponse = await sut.handle(mockHttpRequest());
+    expect(httpResponse).toEqual(notFounError('email'));
   });
 });
