@@ -18,6 +18,6 @@ describe('RequiredField Validation', () => {
     const error = sut.validate({
       field: 'any_name',
     });
-    expect(error).toBeFalsy();
+    expect(error).toBeNull();
   });
 });

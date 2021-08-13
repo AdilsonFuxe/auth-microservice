@@ -20,6 +20,6 @@ describe('CompareFieldValidation', () => {
       password: '12354',
       passwordConfirmation: '12354',
     });
-    expect(error).toBeFalsy();
+    expect(error).toBeNull();
   });
 });
