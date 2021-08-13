@@ -8,9 +8,11 @@ import {
 import {
   badRequest,
   notFounError,
+  serverError,
 } from '@src/presentation/helpers/http/http-helper';
 import { HttpRequest, Validation } from '@src/presentation/protocols';
 import { mockAccount } from '@test-suite/domain';
+import { trhowError } from '@test-suite/helper';
 import {
   mockLoadAccountByEmail,
   mockValidationStub,
@@ -110,5 +112,14 @@ describe('ReserPassword Controller', () => {
     );
     const httpResponse = await sut.handle(mockHttpRequest());
     expect(httpResponse).toEqual(badRequest(new TokenExpiredError()));
+  });
+
+  it('Should return 500 if LoadAccountBYEmail throws', async () => {
+    const { sut, loadAccountByEmailStub } = makeSut();
+    jest
+      .spyOn(loadAccountByEmailStub, 'loadByEmail')
+      .mockImplementationOnce(trhowError);
+    const httpResonse = await sut.handle(mockHttpRequest());
+    expect(httpResonse).toEqual(serverError(new Error()));
   });
 });
