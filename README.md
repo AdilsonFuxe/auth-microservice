@@ -9,10 +9,10 @@
 
   <h1 align="center">Node.js Authentication Microservice</h1>
 
-  <!-- <p align="center">
-   
+  <p align="center">
+   A simple API built with Node.js that follows Clean Architecture + TDD + SOLID + DDD principles
     <br />
-  </p> -->
+  </p>
 </p>
 
 <!-- TABLE OF CONTENTS -->
@@ -26,12 +26,15 @@
   - [Prerequisites](#prerequisites)
   - [Installation](#installation)
 - [Endpoints](#endpoints)
+  - [SignUp](#signup)
+  - [SignIn](#signin)
+  - [Forgot Password](#forgot-password)
+  - [Reset Password](#reset-Password)
+  - [me](#me)
 
 <!-- ABOUT THE PROJECT -->
 
 ## About The Project
-
-A simple API built with Node.js that follows Clean Architecture + TDD + SOLID + DDD principles
 
 ### Built With
 
@@ -62,55 +65,31 @@ git clone https://github.com/AdilsonFuxe/clean-auth-microservice.git
 Enter into the server folder
 
 ```sh
-    cd clean-auth-microservice
+cd clean-auth-microservice
 ```
 
-inside the server folder run the following command to install all dependencies
+3. inside the server folder run the following command to install all dependencies
 
 ```sh
-npm install
+npm install or yarn
 ```
 
-or
+4. to generate the build of the project run
 
 ```sh
-yarn install
+npm run build or yarn build
 ```
 
-to generate the build of the project run
+5. to run the server
 
 ```sh
-npm run build
+npm start or yarn start
 ```
 
-or
+6. to run the unit tests and the integration tests
 
 ```sh
-yarn build
-```
-
-to run the server
-
-```sh
-npm start
-```
-
-or
-
-```sh
-yarn start
-```
-
-to run the unit tests and the integration tests
-
-```sh
-npm test
-```
-
-or
-
-```sh
-yarn test
+npm test or yarn test
 ```
 
 <br/>
