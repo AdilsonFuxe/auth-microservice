@@ -121,4 +121,11 @@ describe('ForgotPassword Controller', () => {
       text: `Have you forgotten your password? no problem, use the token to change 123456`,
     });
   });
+
+  it('Should return 500 if SendMail throws', async () => {
+    const { sut, senMailStub } = makeSut();
+    jest.spyOn(senMailStub, 'sendMail').mockImplementationOnce(trhowError);
+    const httpResonse = await sut.handle(mockHttpRequest());
+    expect(httpResonse).toEqual(serverError(new Error()));
+  });
 });
