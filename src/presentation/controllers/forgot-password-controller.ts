@@ -3,6 +3,7 @@ import { LoadAccountByEmail } from '@src/domain/usecases/load-account-by-email';
 import { SendMail } from '@src/domain/usecases/send-mail';
 import {
   badRequest,
+  noContent,
   notFounError,
   serverError,
 } from '@src/presentation/helpers/http/http-helper';
@@ -38,6 +39,7 @@ export class ForgotPasswordController implements Controller {
         subject: 'Forgot password ✔',
         text: `Have you forgotten your password? no problem, use the token to change ${accessToken}`,
       });
+      return noContent();
     } catch (error) {
       return serverError(error);
     }
