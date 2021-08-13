@@ -1,6 +1,7 @@
 import { LoadAccountByEmail } from '@src/domain/usecases/load-account-by-email';
 import {
   badRequest,
+  notFounError,
   serverError,
 } from '@src/presentation/helpers/http/http-helper';
 import {
@@ -23,7 +24,10 @@ export class ForgotPasswordController implements Controller {
         return badRequest(error);
       }
       const { email } = httpRequest.body;
-      await this.loadAccountByEmail.loadByEmail(email);
+      const account = await this.loadAccountByEmail.loadByEmail(email);
+      if (!account) {
+        return notFounError('email');
+      }
     } catch (error) {
       return serverError(error);
     }
