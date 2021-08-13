@@ -29,7 +29,7 @@
   - [SignUp](#signup)
   - [SignIn](#signin)
   - [Forgot Password](#forgot-password)
-  - [Reset Password](#reset-Password)
+  - [Reset Password](#reset-password)
   - [me](#me)
 
 <!-- ABOUT THE PROJECT -->
@@ -98,6 +98,8 @@ npm test or yarn test
 
 <br/>
 
+### SignUp
+
 **POST** `https:/localhost/api/v1/signup`
 
 ##### output example
@@ -120,6 +122,10 @@ npm test or yarn test
 }
 ```
 
+<br/>
+
+### SignIn
+
 **POST** `https:/localhost/api/v1/signin`
 
 ##### output example
@@ -138,6 +144,10 @@ npm test or yarn test
   "accessToken": "any_access_token"
 }
 ```
+
+<br/>
+
+### Me
 
 **GET** `https:/localhost/api/v1/me`
 
@@ -158,6 +168,10 @@ npm test or yarn test
 }
 ```
 
+<br/>
+
+### Forgot Password
+
 **Patch** `https:/localhost/api/v1/forgot`
 
 ##### output example
@@ -172,6 +186,10 @@ npm test or yarn test
   "email": "any_mail@mail.com"
 }
 ```
+
+<br/>
+
+### Reset Password
 
 **Patch** `https:/localhost/api/v1/reset-password`
 
