@@ -3,6 +3,7 @@ import { DbLoadAccountById } from '@src/data/usecases/db-load-accout-by-id';
 import { mockLoadAccountByIdRepository } from '@test-suite/data';
 import { mockAccount } from '@test-suite/domain';
 import { trhowError } from '@test-suite/helper';
+import mockDate from 'mockdate';
 
 type SutTypes = {
   sut: DbLoadAccountById;
@@ -19,6 +20,14 @@ const makeSut = (): SutTypes => {
 };
 
 describe('LoadAccountById Usecase', () => {
+  beforeAll(() => {
+    mockDate.set(new Date());
+  });
+
+  afterAll(() => {
+    mockDate.reset();
+  });
+
   it('Should call LoadAccountByIdRepository with correct id', async () => {
     const { sut, loadAccountByIdRepositoryStub } = makeSut();
     const loadByIdSpy = jest.spyOn(loadAccountByIdRepositoryStub, 'loadById');

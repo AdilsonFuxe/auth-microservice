@@ -6,6 +6,7 @@ import {
 } from '@test-suite/data';
 import { mockAccount } from '@test-suite/domain';
 import { trhowError } from '@test-suite/helper';
+import mockDate from 'mockdate';
 
 type SutTypes = {
   sut: DbLoadAccountByToken;
@@ -28,6 +29,13 @@ const makeSut = (): SutTypes => {
 };
 
 describe('DbLoadAccountByToken Usecase', () => {
+  beforeAll(() => {
+    mockDate.set(new Date());
+  });
+
+  afterAll(() => {
+    mockDate.reset();
+  });
   it('Should call Decrypter with correct values', async () => {
     const { sut, decrypterStub } = makeSut();
     const decryptSpy = jest.spyOn(decrypterStub, 'decrypt');
