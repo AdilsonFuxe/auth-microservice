@@ -4,8 +4,10 @@ import { MissingParamError } from '@src/presentation/errors';
 import {
   badRequest,
   notFounError,
+  serverError,
 } from '@src/presentation/helpers/http/http-helper';
 import { HttpRequest, Validation } from '@src/presentation/protocols';
+import { trhowError } from '@test-suite/helper';
 import {
   mockLoadAccountByEmail,
   mockValidationStub,
@@ -70,5 +72,14 @@ describe('ForgotPassword Controller', () => {
       .mockReturnValueOnce(Promise.resolve(null));
     const httpResponse = await sut.handle(mockHttpRequest());
     expect(httpResponse).toEqual(notFounError('email'));
+  });
+
+  it('Should return 500 if LoadAccountBYEmail throws', async () => {
+    const { sut, loadAccountByEmailStub } = makeSut();
+    jest
+      .spyOn(loadAccountByEmailStub, 'loadByEmail')
+      .mockImplementationOnce(trhowError);
+    const httpResonse = await sut.handle(mockHttpRequest());
+    expect(httpResonse).toEqual(serverError(new Error()));
   });
 });
