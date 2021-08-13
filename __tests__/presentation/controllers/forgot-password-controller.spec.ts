@@ -96,4 +96,11 @@ describe('ForgotPassword Controller', () => {
     await sut.handle(httpRequest);
     expect(forgotSpy).toHaveBeenCalledWith('valid_id');
   });
+
+  it('Should return 500 if ForgotPassword throws', async () => {
+    const { sut, forgotPasswordStub } = makeSut();
+    jest.spyOn(forgotPasswordStub, 'forgot').mockImplementationOnce(trhowError);
+    const httpResonse = await sut.handle(mockHttpRequest());
+    expect(httpResonse).toEqual(serverError(new Error()));
+  });
 });
