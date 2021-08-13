@@ -6,3 +6,4 @@ export * from './mock-load-account-by-token';
 export * from './mock-load-account-by-email';
 export * from './mock-forgot-password';
 export * from './mock-send-mail';
+export * from './mock-update-password';

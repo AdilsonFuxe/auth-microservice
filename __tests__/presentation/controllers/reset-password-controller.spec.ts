@@ -1,4 +1,5 @@
 import { LoadAccountByEmail } from '@src/domain/usecases/load-account-by-email';
+import { UpdatePassword } from '@src/domain/usecases/update-password';
 import { ResetPasswordController } from '@src/presentation/controllers/reset-password-controller';
 import {
   InvalidAccessTokenError,
@@ -15,6 +16,7 @@ import { mockAccount } from '@test-suite/domain';
 import { trhowError } from '@test-suite/helper';
 import {
   mockLoadAccountByEmail,
+  mockUpdatePassword,
   mockValidationStub,
 } from '@test-suite/presentation';
 
@@ -30,19 +32,23 @@ type SutTypes = {
   sut: ResetPasswordController;
   validationStub: Validation;
   loadAccountByEmailStub: LoadAccountByEmail;
+  updatePasswordStub: UpdatePassword;
 };
 
 const makeSut = (): SutTypes => {
   const validationStub = mockValidationStub();
   const loadAccountByEmailStub = mockLoadAccountByEmail();
+  const updatePasswordStub = mockUpdatePassword();
   const sut = new ResetPasswordController(
     validationStub,
-    loadAccountByEmailStub
+    loadAccountByEmailStub,
+    updatePasswordStub
   );
   return {
     sut,
     validationStub,
     loadAccountByEmailStub,
+    updatePasswordStub,
   };
 };
 
@@ -121,5 +127,13 @@ describe('ReserPassword Controller', () => {
       .mockImplementationOnce(trhowError);
     const httpResonse = await sut.handle(mockHttpRequest());
     expect(httpResonse).toEqual(serverError(new Error()));
+  });
+
+  it('Should call UpdatePassword with correct values', async () => {
+    const { sut, updatePasswordStub } = makeSut();
+    const updatePasswordSpy = jest.spyOn(updatePasswordStub, 'updatePasseword');
+    const httpRequest = mockHttpRequest();
+    await sut.handle(httpRequest);
+    expect(updatePasswordSpy).toHaveBeenCalledWith('valid_id', 'new_password');
   });
 });
