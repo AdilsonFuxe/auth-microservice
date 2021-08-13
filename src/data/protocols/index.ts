@@ -9,3 +9,4 @@ export * from './criptography/hash-comparer';
 export * from './criptography/encrypter';
 export * from './criptography/decrypter';
 export * from './criptography/generate-access-token';
+export * from './remote/nodemailer-send-mail';
