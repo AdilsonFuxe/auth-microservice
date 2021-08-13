@@ -71,7 +71,7 @@ inside the server folder run the following command to install all dependencies
 npm install
 ```
 
-ou
+or
 
 ```sh
 yarn install
@@ -83,7 +83,7 @@ to generate the build of the project run
 npm run build
 ```
 
-ou
+or
 
 ```sh
 yarn build
@@ -95,7 +95,7 @@ to run the server
 npm start
 ```
 
-ou
+or
 
 ```sh
 yarn start
@@ -107,7 +107,7 @@ to run the unit tests and the integration tests
 npm test
 ```
 
-ou
+or
 
 ```sh
 yarn test
