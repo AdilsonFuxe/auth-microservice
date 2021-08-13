@@ -8,6 +8,7 @@ import {
 } from '@src/presentation/errors';
 import {
   badRequest,
+  noContent,
   notFounError,
   serverError,
 } from '@src/presentation/helpers/http/http-helper';
@@ -144,5 +145,11 @@ describe('ReserPassword Controller', () => {
       .mockImplementationOnce(trhowError);
     const httpResonse = await sut.handle(mockHttpRequest());
     expect(httpResonse).toEqual(serverError(new Error()));
+  });
+
+  it('Should return 204 forgot password success', async () => {
+    const { sut } = makeSut();
+    const httpResonse = await sut.handle(mockHttpRequest());
+    expect(httpResonse).toEqual(noContent());
   });
 });
