@@ -166,7 +166,7 @@ yarn test
 
 ```json
 // Get https:/localhost/api/v1/me
-// HEADER x-access-token = any_jwt_token
+// HEADER x-access-token = any_access_token
 
 // Response Body
 {
@@ -174,5 +174,20 @@ yarn test
   "firstName": "any_name",
   "lastName": "any_name",
   "email": "anyemail@mail.com"
+}
+```
+
+**Patch** `https:/localhost/api/v1/forgot`
+
+##### output example
+
+#####
+
+```json
+// Patch https:/localhost/api/v1/forgot
+
+// Request Body
+{
+  "email": "any_mail@mail.com"
 }
 ```
