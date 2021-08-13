@@ -1,5 +1,6 @@
 import { ForgotPassword } from '@src/domain/usecases/forgot-password';
 import { LoadAccountByEmail } from '@src/domain/usecases/load-account-by-email';
+import { SendMail } from '@src/domain/usecases/send-mail';
 import { ForgotPasswordController } from '@src/presentation/controllers/forgot-password-controller';
 import { MissingParamError } from '@src/presentation/errors';
 import {
@@ -12,6 +13,7 @@ import { trhowError } from '@test-suite/helper';
 import {
   mockForgotPassword,
   mockLoadAccountByEmail,
+  mockSendMail,
   mockValidationStub,
 } from '@test-suite/presentation';
 
@@ -26,22 +28,26 @@ type SutTypes = {
   validationStub: Validation;
   loadAccountByEmailStub: LoadAccountByEmail;
   forgotPasswordStub: ForgotPassword;
+  senMailStub: SendMail;
 };
 
 const makeSut = (): SutTypes => {
   const validationStub = mockValidationStub();
   const loadAccountByEmailStub = mockLoadAccountByEmail();
   const forgotPasswordStub = mockForgotPassword();
+  const senMailStub = mockSendMail();
   const sut = new ForgotPasswordController(
     validationStub,
     loadAccountByEmailStub,
-    forgotPasswordStub
+    forgotPasswordStub,
+    senMailStub
   );
   return {
     sut,
     validationStub,
     loadAccountByEmailStub,
     forgotPasswordStub,
+    senMailStub,
   };
 };
 
@@ -102,5 +108,17 @@ describe('ForgotPassword Controller', () => {
     jest.spyOn(forgotPasswordStub, 'forgot').mockImplementationOnce(trhowError);
     const httpResonse = await sut.handle(mockHttpRequest());
     expect(httpResonse).toEqual(serverError(new Error()));
+  });
+
+  it('Should call SendMail with correct values', async () => {
+    const { sut, senMailStub } = makeSut();
+    const sendMailSpy = jest.spyOn(senMailStub, 'sendMail');
+    const httpRequest = mockHttpRequest();
+    await sut.handle(httpRequest);
+    expect(sendMailSpy).toHaveBeenCalledWith({
+      to: 'any_email@mail.com',
+      subject: 'Forgot password ✔',
+      text: `Have you forgotten your password? no problem, use the token to change 123456`,
+    });
   });
 });
