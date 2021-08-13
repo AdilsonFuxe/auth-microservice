@@ -18,5 +18,6 @@ export class NodeMailerAdapter implements NodeMailerSendMail {
         pass: this.pass,
       },
     });
+    await transport.sendMail(params);
   }
 }
