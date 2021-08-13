@@ -136,4 +136,13 @@ describe('ReserPassword Controller', () => {
     await sut.handle(httpRequest);
     expect(updatePasswordSpy).toHaveBeenCalledWith('valid_id', 'new_password');
   });
+
+  it('Should return 500 if UpdatePassword throws', async () => {
+    const { sut, updatePasswordStub } = makeSut();
+    jest
+      .spyOn(updatePasswordStub, 'updatePasseword')
+      .mockImplementationOnce(trhowError);
+    const httpResonse = await sut.handle(mockHttpRequest());
+    expect(httpResonse).toEqual(serverError(new Error()));
+  });
 });
