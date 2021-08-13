@@ -1,4 +1,7 @@
-import { serverError } from '@src/presentation/helpers/http/http-helper';
+import {
+  badRequest,
+  serverError,
+} from '@src/presentation/helpers/http/http-helper';
 import {
   Controller,
   HttpRequest,
@@ -11,7 +14,10 @@ export class ForgotPasswordController implements Controller {
 
   async handle(httpRequest: HttpRequest): Promise<HttpResponse> {
     try {
-      this.validation.validate(httpRequest.body);
+      const error = this.validation.validate(httpRequest.body);
+      if (error) {
+        return badRequest(error);
+      }
     } catch (error) {
       return serverError(error);
     }
