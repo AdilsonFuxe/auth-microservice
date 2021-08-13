@@ -6,6 +6,7 @@ import {
 } from '@src/presentation/protocols';
 import {
   badRequest,
+  noContent,
   notFounError,
   serverError,
 } from '@src/presentation/helpers/http/http-helper';
@@ -39,6 +40,7 @@ export class ResetPasswordController implements Controller {
         return badRequest(new TokenExpiredError());
       }
       await this.updatePassword.updatePasseword(account.id, password);
+      return noContent();
     } catch (error) {
       return serverError(error);
     }
