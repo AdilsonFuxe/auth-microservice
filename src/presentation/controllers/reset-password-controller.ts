@@ -10,6 +10,7 @@ import {
   serverError,
 } from '@src/presentation/helpers/http/http-helper';
 import { LoadAccountByEmail } from '@src/domain/usecases/load-account-by-email';
+import { InvalidAccessTokenError } from '../errors';
 
 export class ResetPasswordController implements Controller {
   constructor(
@@ -27,6 +28,9 @@ export class ResetPasswordController implements Controller {
       const account = await this.loadAccountByEmail.loadByEmail(email);
       if (!account) {
         return notFounError('email');
+      }
+      if (account.forgotPasswordAccessToken !== accessToken) {
+        return badRequest(new InvalidAccessTokenError());
       }
     } catch (error) {
       return serverError(error);
