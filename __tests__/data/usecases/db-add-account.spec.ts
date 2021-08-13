@@ -8,6 +8,7 @@ import { mockAddAccountRepositoryStub, mockHasher } from '@test-suite/data';
 import { mockLoadAccountByEmailRepositoryStub } from '@test-suite/data/mock-load-account-by-email-repository';
 import { mockAccount, mockAddAccountParams } from '@test-suite/domain';
 import { trhowError } from '@test-suite/helper';
+import mockDate from 'mockdate';
 
 type SutTypes = {
   sut: DbAddAccount;
@@ -35,6 +36,13 @@ const makeSut = (): SutTypes => {
 };
 
 describe('DbAddAccount UseCase', () => {
+  beforeAll(() => {
+    mockDate.set(new Date());
+  });
+
+  afterAll(() => {
+    mockDate.reset();
+  });
   it('Should call LoadAccountByEmailRepository with correct email', async () => {
     const { sut, loadAccountByEmailRepositoryStub } = makeSut();
     const loadByEmailSpy = jest.spyOn(
