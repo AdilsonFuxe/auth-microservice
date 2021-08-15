@@ -1,0 +1,27 @@
+version: '3'
+services:
+  mongo:
+    container_name: mongo-container
+    image: mongo:4
+    logging:
+      driver: none
+    restart: always
+    volumes:
+      - ./data:/data/db
+    ports:
+      - '27017:27017'
+  api:
+    container_name: api-container
+    image: node:14
+    working_dir: /usr/src/clean-auth-microservice/dist
+    restart: always
+    command: bash -c "npm install && npm start"
+    environment:
+      - MONGO_URL=mongodb://mongo:27017/authDb
+    volumes:
+      - ./dist:/usr/src/clean-auth-microservice/dist
+      - ./package.json:/usr/src/clean-auth-microservice/package.json
+    ports:
+      - '5050:5050'
+    links:
+      - mongo
