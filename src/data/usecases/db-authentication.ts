@@ -13,6 +13,7 @@ export class DbAuthentication implements Authentication {
     private readonly encrypter: Encrypter,
     private readonly updateAcessTokenRepository: UpdateAcessTokenRepository
   ) {}
+
   async auth(params: AuthenticationParams): Promise<string> {
     const account = await this.loadAccountByEmailRepository.loadByEmail(
       params.email

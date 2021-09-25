@@ -10,6 +10,7 @@ export class NodeMailerAdapter implements NodeMailerSendMail {
     private readonly user: string,
     private readonly pass: string
   ) {}
+
   async sendMail(params: SendMailParams): Promise<void> {
     const transport = nodemailer.createTransport({
       host: this.host,

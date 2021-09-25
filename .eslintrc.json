@@ -1,9 +1,14 @@
- {
+{
   "extends": ["standard-with-typescript", "prettier"],
+  "plugins": ["prettier"],
   "parserOptions": {
     "project": "./tsconfig.json"
   },
   "rules": {
-   "@typescript-eslint/consistent-type-definitions": "false",
+    "@typescript-eslint/consistent-type-definitions": "off",
+    "@typescript-eslint/strict-boolean-expressions": "off",
+    "@typescript-eslint/naming-convention": "warn",
+    "@typescript-eslint/no-misused-promises": "off",
+    "@typescript-eslint/no-namespace": "off"
   }
 }
