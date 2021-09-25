@@ -73,7 +73,10 @@ describe('DbAddAccount UseCase', () => {
   });
 
   test('Should call Hasher with correct password', async () => {
-    const { sut, hasherStub } = makeSut();
+    const { sut, hasherStub, loadAccountByEmailRepositoryStub } = makeSut();
+    jest
+      .spyOn(loadAccountByEmailRepositoryStub, 'loadByEmail')
+      .mockReturnValueOnce(Promise.resolve(null));
     const hashSpy = jest.spyOn(hasherStub, 'hash');
     const accountParams = mockAddAccountParams();
     await sut.add(accountParams);
@@ -81,7 +84,10 @@ describe('DbAddAccount UseCase', () => {
   });
 
   test('Should throw if Hasher throws', async () => {
-    const { sut, hasherStub } = makeSut();
+    const { sut, hasherStub, loadAccountByEmailRepositoryStub } = makeSut();
+    jest
+      .spyOn(loadAccountByEmailRepositoryStub, 'loadByEmail')
+      .mockReturnValueOnce(Promise.resolve(null));
     jest.spyOn(hasherStub, 'hash').mockImplementationOnce(trhowError);
     const account = sut.add(mockAddAccountParams());
     await expect(account).rejects.toThrow();

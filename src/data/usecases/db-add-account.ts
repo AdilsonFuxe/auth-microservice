@@ -17,10 +17,10 @@ export class DbAddAccount implements AddAccount {
     const account = await this.loadAccountByEmailRepository.loadByEmail(
       params.email
     );
-    const hashedPassword = await this.hasher.hash(params.password);
     if (account) {
       return null;
     }
+    const hashedPassword = await this.hasher.hash(params.password);
     const result = await this.addAccountRepository.add({
       firstName: params.firstName,
       lastName: params.lastName,
