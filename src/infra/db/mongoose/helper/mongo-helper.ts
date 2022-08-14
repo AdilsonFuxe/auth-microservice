@@ -2,12 +2,7 @@ import mongoose from 'mongoose';
 
 export const MongoHelper = {
   async connect(uri: string): Promise<void> {
-    await mongoose.connect(uri, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-      useCreateIndex: true,
-      useFindAndModify: false,
-    });
+    await mongoose.connect(uri);
   },
 
   async disconnect(): Promise<void> {
