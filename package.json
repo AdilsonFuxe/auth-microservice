@@ -13,7 +13,7 @@
     "test:staged": "npm test -- --findRelatedTests",
     "test:ci": "npm test -- --coverage",
     "test:coveralls": "npm run test:ci && coveralls < coverage/lcov.info",
-    "prepare": "husky install",
+    "husky": "husky install",
     "docker:up": "npm run build && docker-compose up",
     "docker:down": "docker-compose down"
   },
