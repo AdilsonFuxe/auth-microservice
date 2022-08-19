@@ -2,7 +2,3 @@ node_modules
 dist
 coverage
 .env
-data
-!src/data
-!src/test-suite
-!src/__tests__

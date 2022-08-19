@@ -20,4 +20,5 @@ export default {
     '@src/(.*)': '<rootDir>/src/$1',
     '@test-suite/(.*)': '<rootDir>/test-suite/$1',
   },
+  setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
 };

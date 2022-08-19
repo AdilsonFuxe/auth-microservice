@@ -2,13 +2,23 @@
   "extends": ["standard-with-typescript", "prettier"],
   "plugins": ["prettier"],
   "parserOptions": {
-    "project": "./tsconfig.json"
+    "project": "./tsconfig.json",
+    "overrides": [
+      {
+        "files": ["*.ts"],
+        "parser": "typescript"
+      }
+    ]
   },
   "rules": {
     "@typescript-eslint/consistent-type-definitions": "off",
     "@typescript-eslint/strict-boolean-expressions": "off",
     "@typescript-eslint/naming-convention": "warn",
     "@typescript-eslint/no-misused-promises": "off",
-    "@typescript-eslint/no-namespace": "off"
+    "@typescript-eslint/no-namespace": "off",
+    "@typescript-eslint/consistent-type-assertions": "off",
+    "@typescript-eslint/no-redeclare": "off",
+    "@typescript-eslint/no-floating-promises": "off",
+    "@typescript-eslint/explicit-function-return-type": "off"
   }
 }
