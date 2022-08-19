@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auth-microservice
+  labels:
+    app: auth-microservice
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: auth-microservice
+  template:
+    metadata:
+      labels:
+        app: auth-microservice
+    spec:
+      containers:
+      - name: auth-microservice
+        image: adilsonfuxe/auth-microservice
+        env:
+          - name: MONGO_URL
+            value: mongodb://mongodb:27017/authDb
+        ports:
+          - containerPort: 5050
