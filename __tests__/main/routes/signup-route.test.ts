@@ -1,17 +1,17 @@
 import request from 'supertest';
 import app from '@src/main/config/app';
 import { MongoHelper } from '@src/infra/db/mongoose/helper/mongo-helper';
-import { AccountMongooseModel } from '@src/infra/db/mongoose/models';
+import { AccountModel } from '@src/infra/db/mongoose/models';
 import { HttpStatusCode } from '@src/presentation/protocols';
 import faker from 'faker';
 
 describe('Post /signup', () => {
   beforeAll(async () => {
-    await MongoHelper.connect(process.env.MONGO_URL as string);
+    await MongoHelper.connect(process.env.MONGO_URL);
   });
 
   beforeEach(async () => {
-    await AccountMongooseModel.deleteMany({});
+    await AccountModel.deleteMany({});
   });
 
   afterAll(async () => {

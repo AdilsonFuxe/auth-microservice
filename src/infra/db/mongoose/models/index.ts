@@ -1,1 +1,1 @@
-export { default as AccountMongooseModel } from './account-models';
+export { default as AccountModel } from './account-models';

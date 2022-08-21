@@ -9,4 +9,5 @@ export default {
   smtpPort: process.env.SMTP_PORT || 12345,
   smtpUser: process.env.SMTP_USER || 'admin',
   smtpPass: process.env.SMTP_PASS || 'admin',
+  salt: 12,
 };

@@ -1,11 +1,11 @@
-import { GenerateAccessTokenAdapter } from '@src/infra/cryptography';
+import { generateAccessTokenAdapter } from '@src/infra/cryptography';
 
-const makeSut = () => new GenerateAccessTokenAdapter();
+const makeSut = () => generateAccessTokenAdapter;
 
 describe('GenerateAccessTokenAdapter', () => {
   it('Should return 4 digit access token', () => {
     const sut = makeSut();
-    const accessToken = sut.generate();
+    const accessToken = sut();
     const response = accessToken >= 100000 && accessToken <= 999999;
     expect(response).toBeTruthy();
   });

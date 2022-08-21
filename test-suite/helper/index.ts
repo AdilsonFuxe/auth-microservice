@@ -1,14 +1,15 @@
-import { AccountMongooseModel } from '@src/infra/db/mongoose/models';
+import { AccountModel } from '@src/infra/db/mongoose/models';
 import { hash } from 'bcrypt';
 import env from '@src/main/config/env';
 import { sign } from 'jsonwebtoken';
 import faker from 'faker';
+import nodemailer from 'nodemailer';
 
-export const trhowError = (): never => {
+export const throwError = (): any => {
   throw new Error();
 };
 
-export type mockCreateAccountResponse = {
+type mockCreateAccountResponse = {
   email: string;
   password: string;
   accountId: string;
@@ -18,14 +19,14 @@ export const mockCreateAccountOnDb =
   async (): Promise<mockCreateAccountResponse> => {
     const email = faker.internet.email();
     const password = faker.internet.password();
-    const hashed_password = await hash(password, 12);
+    const hashedPassword = await hash(password, 12);
     const date = new Date();
     date.setMinutes(date.getMinutes() + 5);
-    const doc = new AccountMongooseModel({
+    const doc = new AccountModel({
       firstName: faker.name.firstName(),
       lastName: faker.name.lastName(),
       email,
-      password: hashed_password,
+      password: hashedPassword,
       forgotPasswordAccessToken: 123456,
       forgotPasswordExpiresIn: date,
     });
@@ -36,6 +37,11 @@ export const mockCreateAccountOnDb =
 export const mockAuthenticateUser = async (): Promise<string> => {
   const { accountId } = await mockCreateAccountOnDb();
   const accessToken = sign({ accountId }, env.jwtSecret);
-  await AccountMongooseModel.updateOne({ _id: accountId }, { accessToken });
+  await AccountModel.updateOne({ _id: accountId }, { accessToken });
   return accessToken;
+};
+
+export const mockNodeMailer = (): jest.Mocked<typeof nodemailer> => {
+  const mockedNodeMailer = nodemailer as jest.Mocked<typeof nodemailer>;
+  return mockedNodeMailer;
 };

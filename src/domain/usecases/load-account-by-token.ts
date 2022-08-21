@@ -1,5 +1,8 @@
 import { AccountModel } from '@src/domain/models';
 
-export interface LoadAccountByToken {
-  loadByToken: (accessToken: string) => Promise<AccountModel>;
+export type LoadAccountByToken = (
+  accessToken: string
+) => LoadAccountByToken.Response;
+export namespace LoadAccountByToken {
+  export type Response = Promise<AccountModel>;
 }

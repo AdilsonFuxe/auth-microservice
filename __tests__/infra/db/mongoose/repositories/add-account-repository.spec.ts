@@ -1,24 +1,32 @@
 import { MongoHelper } from '@src/infra/db/mongoose/helper/mongo-helper';
-import { mockAddAccountParams } from '@test-suite/domain';
-import { AccountMongooseModel } from '@src/infra/db/mongoose/models';
-import { AccountMongoRepository } from '@src/infra/db/mongoose/repositories';
+import { AccountModel } from '@src/infra/db/mongoose/models';
+import { addAccountRepository } from '@src/infra/db/mongoose/repositories';
+import faker from 'faker';
 
-const makeSut = () => new AccountMongoRepository();
+const makeSut = () => {
+  const mockParams = () => ({
+    firstName: faker.name.firstName(),
+    lastName: faker.name.lastName(),
+    email: faker.internet.email(),
+    password: faker.internet.password(),
+  });
+  return { sut: addAccountRepository, mockParams };
+};
 
 describe('AddAccountMongoRepository', () => {
   beforeAll(async () => {
-    await MongoHelper.connect(process.env.MONGO_URL as string);
+    await MongoHelper.connect(process.env.MONGO_URL);
   });
 
   afterAll(async () => {
-    await AccountMongooseModel.deleteMany({});
+    await AccountModel.deleteMany({});
     await MongoHelper.disconnect();
   });
 
   it('Should return an account on add success', async () => {
-    const sut = makeSut();
-    const accountParams = mockAddAccountParams();
-    const account = await sut.add(accountParams);
+    const { sut, mockParams } = makeSut();
+    const accountParams = mockParams();
+    const account = await sut(accountParams);
     expect(account).toBeTruthy();
     expect(account.id).toBeTruthy();
     expect(account.firstName).toBe(accountParams.firstName);

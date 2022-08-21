@@ -1,7 +1,8 @@
-import { Middleware } from '@src/presentation/protocols';
-import { AuthMiddleware } from '@src/presentation/middlewares/auth-middleware';
-import { makeDbLoadAccountByToken } from '@src/main/factories/usecases/db-load-account-by-token';
+import { authMiddleware } from '@src/presentation/middlewares/auth-middleware';
+import { Controller } from '@src/presentation/protocols';
+import { makeDbLoadAccountByToken } from '@src/main/factories/usecases';
 
-export const makeAuthMiddleware = (): Middleware => {
-  return new AuthMiddleware(makeDbLoadAccountByToken());
-};
+export const makeAuthMiddleware = (): Controller =>
+  authMiddleware({
+    loadAccountByToken: makeDbLoadAccountByToken(),
+  });

@@ -1,16 +1,11 @@
 import { InvalidParamError } from '@src/presentation/errors';
 import { Validation } from '@src/presentation/protocols';
 
-export class CompareFieldValidation implements Validation {
-  constructor(
-    private readonly fieldName: string,
-    private readonly fieldToCompareName: string
-  ) {}
-
-  validate(input: any): Error {
-    if (input[this.fieldName] !== input[this.fieldToCompareName]) {
-      return new InvalidParamError(this.fieldToCompareName);
+export const compareFieldValidation =
+  (fieldName: string, fieldToCompare: string): Validation =>
+  (input) => {
+    if (input[fieldName] !== input[fieldToCompare]) {
+      return new InvalidParamError(fieldToCompare);
     }
     return null;
-  }
-}
+  };

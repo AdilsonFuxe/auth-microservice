@@ -1,13 +1,14 @@
 import { AccountModel } from '@src/domain/models';
 
-export type UpdateForgotPasswordAccessTokenParams = {
-  accessToken: number;
-  expiresIn: Date;
-};
+export type UpdateForgotPasswordAccessTokenRepository = (
+  id: string,
+  params: UpdateForgotPasswordAccessTokenRepository.Params
+) => UpdateForgotPasswordAccessTokenRepository.Response;
 
-export interface UpdateForgotPasswordAccessTokenRepository {
-  updateForgotPasswordToken: (
-    id: string,
-    params: UpdateForgotPasswordAccessTokenParams
-  ) => Promise<AccountModel>;
+export namespace UpdateForgotPasswordAccessTokenRepository {
+  export type Params = {
+    accessToken: number;
+    expiresIn: Date;
+  };
+  export type Response = Promise<AccountModel>;
 }

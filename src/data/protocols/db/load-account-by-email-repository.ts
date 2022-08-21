@@ -1,5 +1,9 @@
-import { AccountModel } from '@src/domain/models';
+import { LoadAccountByEmail } from '@src/domain/usecases';
 
-export interface LoadAccountByEmailRepository {
-  loadByEmail: (email: string) => Promise<AccountModel>;
+export type LoadAccountByEmailRepository = (
+  email: string
+) => LoadAccountByEmailRepository.Response;
+
+export namespace LoadAccountByEmailRepository {
+  export type Response = LoadAccountByEmail.Response;
 }

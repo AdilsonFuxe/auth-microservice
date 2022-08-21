@@ -1,122 +1,99 @@
-import { ForgotPassword } from '@src/domain/usecases/forgot-password';
-import { LoadAccountByEmail } from '@src/domain/usecases/load-account-by-email';
-import { SendMail } from '@src/domain/usecases/send-mail';
-import { ForgotPasswordController } from '@src/presentation/controllers/forgot-password-controller';
+import { forgotPasswordController } from '@src/presentation/controllers';
 import { MissingParamError } from '@src/presentation/errors';
 import {
   badRequest,
   noContent,
-  notFounError,
+  notFoundError,
   serverError,
-} from '@src/presentation/helpers/http/http-helper';
-import { HttpRequest, Validation } from '@src/presentation/protocols';
-import { trhowError } from '@test-suite/helper';
+} from '@src/presentation/helpers/http';
+import { HttpRequest } from '@src/presentation/protocols';
 import {
   mockForgotPassword,
   mockLoadAccountByEmail,
   mockSendMail,
-  mockValidationStub,
+  mockValidation,
 } from '@test-suite/presentation';
 
-const mockHttpRequest = (): HttpRequest => ({
-  body: {
-    email: 'any_email@mail.com',
-  },
-});
-
-type SutTypes = {
-  sut: ForgotPasswordController;
-  validationStub: Validation;
-  loadAccountByEmailStub: LoadAccountByEmail;
-  forgotPasswordStub: ForgotPassword;
-  senMailStub: SendMail;
-};
-
-const makeSut = (): SutTypes => {
-  const validationStub = mockValidationStub();
-  const loadAccountByEmailStub = mockLoadAccountByEmail();
-  const forgotPasswordStub = mockForgotPassword();
-  const senMailStub = mockSendMail();
-  const sut = new ForgotPasswordController(
-    validationStub,
-    loadAccountByEmailStub,
-    forgotPasswordStub,
-    senMailStub
-  );
+const makeSut = () => {
+  const mockHttpRequest = (): HttpRequest => ({
+    body: {
+      email: 'any_email@mail.com',
+    },
+  });
+  const validation = jest.fn(mockValidation());
+  const loadAccountByEmail = jest.fn(mockLoadAccountByEmail());
+  const forgotPassword = jest.fn(mockForgotPassword());
+  const sendMail = jest.fn(mockSendMail());
+  const sut = forgotPasswordController({
+    forgotPassword,
+    loadAccountByEmail,
+    sendMail,
+    validation,
+  });
   return {
+    mockHttpRequest,
     sut,
-    validationStub,
-    loadAccountByEmailStub,
-    forgotPasswordStub,
-    senMailStub,
+    forgotPassword,
+    loadAccountByEmail,
+    sendMail,
+    validation,
   };
 };
 
 describe('ForgotPassword Controller', () => {
   it('Should call Validation with correct values', async () => {
-    const { sut, validationStub } = makeSut();
-    const validateSpy = jest.spyOn(validationStub, 'validate');
+    const { sut, validation, mockHttpRequest } = makeSut();
     const httpRequest = mockHttpRequest();
-    await sut.handle(httpRequest);
-    expect(validateSpy).toHaveBeenCalledWith(httpRequest.body);
+    await sut(httpRequest);
+    expect(validation).toHaveBeenCalledWith(httpRequest.body);
   });
 
   it('Should return 400 if Validation returns an error', async () => {
-    const { sut, validationStub } = makeSut();
-    jest
-      .spyOn(validationStub, 'validate')
-      .mockReturnValueOnce(new MissingParamError('any_field'));
-    const httpResonse = await sut.handle(mockHttpRequest());
-    expect(httpResonse).toEqual(badRequest(new MissingParamError('any_field')));
+    const { sut, validation, mockHttpRequest } = makeSut();
+    validation.mockReturnValue(new MissingParamError('any_field'));
+    const httpResponse = await sut(mockHttpRequest());
+    expect(httpResponse).toEqual(
+      badRequest(new MissingParamError('any_field'))
+    );
   });
 
   it('Should call LoadAccountBYEmail with correct email', async () => {
-    const { sut, loadAccountByEmailStub } = makeSut();
-    const loadByEmailSpy = jest.spyOn(loadAccountByEmailStub, 'loadByEmail');
-    const httpRequest = mockHttpRequest();
-    await sut.handle(httpRequest);
-    expect(loadByEmailSpy).toHaveBeenCalledWith('any_email@mail.com');
+    const { sut, loadAccountByEmail, mockHttpRequest } = makeSut();
+    await sut(mockHttpRequest());
+    expect(loadAccountByEmail).toHaveBeenCalledWith('any_email@mail.com');
   });
 
   it('Should return 404 if an invalid email is provided', async () => {
-    const { sut, loadAccountByEmailStub } = makeSut();
-    jest
-      .spyOn(loadAccountByEmailStub, 'loadByEmail')
-      .mockReturnValueOnce(Promise.resolve(null));
-    const httpResponse = await sut.handle(mockHttpRequest());
-    expect(httpResponse).toEqual(notFounError('email'));
+    const { sut, loadAccountByEmail, mockHttpRequest } = makeSut();
+    loadAccountByEmail.mockResolvedValue(null);
+    const httpResponse = await sut(mockHttpRequest());
+    expect(httpResponse).toEqual(notFoundError('email'));
   });
 
   it('Should return 500 if LoadAccountBYEmail throws', async () => {
-    const { sut, loadAccountByEmailStub } = makeSut();
-    jest
-      .spyOn(loadAccountByEmailStub, 'loadByEmail')
-      .mockImplementationOnce(trhowError);
-    const httpResonse = await sut.handle(mockHttpRequest());
-    expect(httpResonse).toEqual(serverError(new Error()));
+    const { sut, loadAccountByEmail, mockHttpRequest } = makeSut();
+    loadAccountByEmail.mockRejectedValue(new Error());
+    const httpResponse = await sut(mockHttpRequest());
+    expect(httpResponse).toEqual(serverError(new Error()));
   });
 
   it('Should call ForgotPassword with correct id', async () => {
-    const { sut, forgotPasswordStub } = makeSut();
-    const forgotSpy = jest.spyOn(forgotPasswordStub, 'forgot');
-    const httpRequest = mockHttpRequest();
-    await sut.handle(httpRequest);
-    expect(forgotSpy).toHaveBeenCalledWith('valid_id');
+    const { sut, forgotPassword, mockHttpRequest } = makeSut();
+    await sut(mockHttpRequest());
+    expect(forgotPassword).toHaveBeenCalledWith('valid_id');
   });
 
   it('Should return 500 if ForgotPassword throws', async () => {
-    const { sut, forgotPasswordStub } = makeSut();
-    jest.spyOn(forgotPasswordStub, 'forgot').mockImplementationOnce(trhowError);
-    const httpResonse = await sut.handle(mockHttpRequest());
-    expect(httpResonse).toEqual(serverError(new Error()));
+    const { sut, forgotPassword, mockHttpRequest } = makeSut();
+    forgotPassword.mockRejectedValue(new Error());
+    const httpResponse = await sut(mockHttpRequest());
+    expect(httpResponse).toEqual(serverError(new Error()));
   });
 
   it('Should call SendMail with correct values', async () => {
-    const { sut, senMailStub } = makeSut();
-    const sendMailSpy = jest.spyOn(senMailStub, 'sendMail');
-    const httpRequest = mockHttpRequest();
-    await sut.handle(httpRequest);
-    expect(sendMailSpy).toHaveBeenCalledWith({
+    const { sut, sendMail, mockHttpRequest } = makeSut();
+    await sut(mockHttpRequest());
+    expect(sendMail).toHaveBeenCalledWith({
       to: 'any_email@mail.com',
       subject: 'Forgot password ✔',
       text: `Have you forgotten your password? no problem, use the token to change 123456`,
@@ -124,15 +101,15 @@ describe('ForgotPassword Controller', () => {
   });
 
   it('Should return 500 if SendMail throws', async () => {
-    const { sut, senMailStub } = makeSut();
-    jest.spyOn(senMailStub, 'sendMail').mockImplementationOnce(trhowError);
-    const httpResonse = await sut.handle(mockHttpRequest());
-    expect(httpResonse).toEqual(serverError(new Error()));
+    const { sut, sendMail, mockHttpRequest } = makeSut();
+    sendMail.mockRejectedValue(new Error());
+    const httpResponse = await sut(mockHttpRequest());
+    expect(httpResponse).toEqual(serverError(new Error()));
   });
 
   it('Should return 204 forgot password success', async () => {
-    const { sut } = makeSut();
-    const httpResonse = await sut.handle(mockHttpRequest());
-    expect(httpResonse).toEqual(noContent());
+    const { sut, mockHttpRequest } = makeSut();
+    const httpResponse = await sut(mockHttpRequest());
+    expect(httpResponse).toEqual(noContent());
   });
 });

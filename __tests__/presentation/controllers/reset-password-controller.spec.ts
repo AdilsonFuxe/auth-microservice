@@ -1,6 +1,4 @@
-import { LoadAccountByEmail } from '@src/domain/usecases/load-account-by-email';
-import { UpdatePassword } from '@src/domain/usecases/update-password';
-import { ResetPasswordController } from '@src/presentation/controllers/reset-password-controller';
+import { resetPasswordController } from '@src/presentation/controllers';
 import {
   InvalidAccessTokenError,
   MissingParamError,
@@ -9,147 +7,119 @@ import {
 import {
   badRequest,
   noContent,
-  notFounError,
+  notFoundError,
   serverError,
-} from '@src/presentation/helpers/http/http-helper';
-import { HttpRequest, Validation } from '@src/presentation/protocols';
+} from '@src/presentation/helpers/http';
+import { HttpRequest } from '@src/presentation/protocols';
 import { mockAccount } from '@test-suite/domain';
-import { trhowError } from '@test-suite/helper';
 import {
   mockLoadAccountByEmail,
   mockUpdatePassword,
-  mockValidationStub,
+  mockValidation,
 } from '@test-suite/presentation';
 
-const mockHttpRequest = (): HttpRequest => ({
-  body: {
-    email: 'any_email@mail.com',
-    accessToken: 123456,
-    password: 'new_password',
-  },
-});
+const makeSut = () => {
+  const mockHttpRequest = (): HttpRequest => ({
+    body: {
+      email: 'any_email@mail.com',
+      accessToken: 123456,
+      password: 'new_password',
+    },
+  });
 
-type SutTypes = {
-  sut: ResetPasswordController;
-  validationStub: Validation;
-  loadAccountByEmailStub: LoadAccountByEmail;
-  updatePasswordStub: UpdatePassword;
-};
-
-const makeSut = (): SutTypes => {
-  const validationStub = mockValidationStub();
-  const loadAccountByEmailStub = mockLoadAccountByEmail();
-  const updatePasswordStub = mockUpdatePassword();
-  const sut = new ResetPasswordController(
-    validationStub,
-    loadAccountByEmailStub,
-    updatePasswordStub
-  );
+  const validation = jest.fn(mockValidation());
+  const loadAccountByEmail = jest.fn(mockLoadAccountByEmail());
+  const updatePassword = jest.fn(mockUpdatePassword());
+  const sut = resetPasswordController({
+    validation,
+    loadAccountByEmail,
+    updatePassword,
+  });
   return {
     sut,
-    validationStub,
-    loadAccountByEmailStub,
-    updatePasswordStub,
+    validation,
+    loadAccountByEmail,
+    updatePassword,
+    mockHttpRequest,
   };
 };
 
-describe('ReserPassword Controller', () => {
+describe('ResetPassword Controller', () => {
   it('Should call Validation with correct values', async () => {
-    const { sut, validationStub } = makeSut();
-    const validateSpy = jest.spyOn(validationStub, 'validate');
+    const { sut, validation, mockHttpRequest } = makeSut();
     const httpRequest = mockHttpRequest();
-    await sut.handle(httpRequest);
-    expect(validateSpy).toHaveBeenCalledWith(httpRequest.body);
+    await sut(httpRequest);
+    expect(validation).toHaveBeenCalledWith(httpRequest.body);
   });
 
   it('Should return 400 if Validation returns an error', async () => {
-    const { sut, validationStub } = makeSut();
-    jest
-      .spyOn(validationStub, 'validate')
-      .mockReturnValueOnce(new MissingParamError('any_field'));
-    const httpResonse = await sut.handle(mockHttpRequest());
-    expect(httpResonse).toEqual(badRequest(new MissingParamError('any_field')));
+    const { sut, validation, mockHttpRequest } = makeSut();
+    validation.mockReturnValue(new MissingParamError('any_field'));
+    const httpResponse = await sut(mockHttpRequest());
+    expect(httpResponse).toEqual(
+      badRequest(new MissingParamError('any_field'))
+    );
   });
 
   it('Should call LoadAccountByEmail with correct email', async () => {
-    const { sut, loadAccountByEmailStub } = makeSut();
-    const loadByEmailSpy = jest.spyOn(loadAccountByEmailStub, 'loadByEmail');
-    const httpRequest = mockHttpRequest();
-    await sut.handle(httpRequest);
-    expect(loadByEmailSpy).toHaveBeenCalledWith('any_email@mail.com');
+    const { sut, loadAccountByEmail, mockHttpRequest } = makeSut();
+    await sut(mockHttpRequest());
+    expect(loadAccountByEmail).toHaveBeenCalledWith('any_email@mail.com');
   });
 
   it('Should return 404 if an invalid email is provided', async () => {
-    const { sut, loadAccountByEmailStub } = makeSut();
-    jest
-      .spyOn(loadAccountByEmailStub, 'loadByEmail')
-      .mockReturnValueOnce(Promise.resolve(null));
-    const httpResponse = await sut.handle(mockHttpRequest());
-    expect(httpResponse).toEqual(notFounError('email'));
+    const { sut, loadAccountByEmail, mockHttpRequest } = makeSut();
+    loadAccountByEmail.mockResolvedValue(null);
+    const httpResponse = await sut(mockHttpRequest());
+    expect(httpResponse).toEqual(notFoundError('email'));
   });
 
   it('Should return 400 if an invalid accessToken is provided', async () => {
-    const { sut, loadAccountByEmailStub } = makeSut();
-    const { forgotPasswordAccessToken, ...accountWithoutAccessToken } =
-      mockAccount();
-    jest.spyOn(loadAccountByEmailStub, 'loadByEmail').mockReturnValueOnce(
-      Promise.resolve({
-        forgotPasswordAccessToken: 240998,
-        ...accountWithoutAccessToken,
-      })
-    );
-    const httpResponse = await sut.handle(mockHttpRequest());
+    const { sut, loadAccountByEmail, mockHttpRequest } = makeSut();
+    loadAccountByEmail.mockResolvedValue({
+      ...mockAccount(),
+      forgotPasswordAccessToken: 240998,
+    });
+    const httpResponse = await sut(mockHttpRequest());
     expect(httpResponse).toEqual(badRequest(new InvalidAccessTokenError()));
   });
 
   it('Should return 400 if provided access token is expired', async () => {
-    const { sut, loadAccountByEmailStub } = makeSut();
-    const { forgotPasswordExpiresIn, ...accountWithoutExpiresIn } =
-      mockAccount();
-
+    const { sut, loadAccountByEmail, mockHttpRequest } = makeSut();
     const date = new Date();
     date.setMinutes(date.getMinutes() - 10);
+    loadAccountByEmail.mockResolvedValue({
+      ...mockAccount(),
+      forgotPasswordExpiresIn: date,
+    });
 
-    mockAccount();
-    jest.spyOn(loadAccountByEmailStub, 'loadByEmail').mockReturnValueOnce(
-      Promise.resolve({
-        forgotPasswordExpiresIn: date,
-        ...accountWithoutExpiresIn,
-      })
-    );
-    const httpResponse = await sut.handle(mockHttpRequest());
+    const httpResponse = await sut(mockHttpRequest());
     expect(httpResponse).toEqual(badRequest(new TokenExpiredError()));
   });
 
-  it('Should return 500 if LoadAccountBYEmail throws', async () => {
-    const { sut, loadAccountByEmailStub } = makeSut();
-    jest
-      .spyOn(loadAccountByEmailStub, 'loadByEmail')
-      .mockImplementationOnce(trhowError);
-    const httpResonse = await sut.handle(mockHttpRequest());
-    expect(httpResonse).toEqual(serverError(new Error()));
+  it('Should return 500 if LoadAccountByEmail throws', async () => {
+    const { sut, loadAccountByEmail, mockHttpRequest } = makeSut();
+    loadAccountByEmail.mockRejectedValue(new Error());
+    const httpResponse = await sut(mockHttpRequest());
+    expect(httpResponse).toEqual(serverError(new Error()));
   });
 
   it('Should call UpdatePassword with correct values', async () => {
-    const { sut, updatePasswordStub } = makeSut();
-    const updatePasswordSpy = jest.spyOn(updatePasswordStub, 'updatePasseword');
-    const httpRequest = mockHttpRequest();
-    await sut.handle(httpRequest);
-    expect(updatePasswordSpy).toHaveBeenCalledWith('valid_id', 'new_password');
+    const { sut, updatePassword, mockHttpRequest } = makeSut();
+    await sut(mockHttpRequest());
+    expect(updatePassword).toHaveBeenCalledWith('valid_id', 'new_password');
   });
 
   it('Should return 500 if UpdatePassword throws', async () => {
-    const { sut, updatePasswordStub } = makeSut();
-    jest
-      .spyOn(updatePasswordStub, 'updatePasseword')
-      .mockImplementationOnce(trhowError);
-    const httpResonse = await sut.handle(mockHttpRequest());
-    expect(httpResonse).toEqual(serverError(new Error()));
+    const { sut, updatePassword, mockHttpRequest } = makeSut();
+    updatePassword.mockRejectedValue(new Error());
+    const httpResponse = await sut(mockHttpRequest());
+    expect(httpResponse).toEqual(serverError(new Error()));
   });
 
   it('Should return 204 forgot password success', async () => {
-    const { sut } = makeSut();
-    const httpResonse = await sut.handle(mockHttpRequest());
-    expect(httpResonse).toEqual(noContent());
+    const { sut, mockHttpRequest } = makeSut();
+    const httpResponse = await sut(mockHttpRequest());
+    expect(httpResponse).toEqual(noContent());
   });
 });

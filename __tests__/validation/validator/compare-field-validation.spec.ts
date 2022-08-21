@@ -1,13 +1,13 @@
 import { InvalidParamError } from '@src/presentation/errors';
-import { CompareFieldValidation } from '@src/validation/validators';
+import { compareFieldValidation } from '@src/validation/validators';
 
-const makeSut = (): CompareFieldValidation =>
-  new CompareFieldValidation('password', 'passwordConfirmation');
+const makeSut = () =>
+  compareFieldValidation('password', 'passwordConfirmation');
 
 describe('CompareFieldValidation', () => {
   it('Should returns a InvalidParamError if Validation fails', () => {
     const sut = makeSut();
-    const error = sut.validate({
+    const error = sut({
       password: '12354',
       passwordConfirmation: '12345',
     });
@@ -16,7 +16,7 @@ describe('CompareFieldValidation', () => {
 
   it('Should not returns if validation succeeds', () => {
     const sut = makeSut();
-    const error = sut.validate({
+    const error = sut({
       password: '12354',
       passwordConfirmation: '12354',
     });

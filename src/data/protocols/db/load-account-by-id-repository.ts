@@ -1,5 +1,9 @@
-import { AccountModel } from '@src/domain/models';
+import { LoadAccountById } from '@src/domain/usecases';
 
-export interface LoadAccountByIdlRepository {
-  loadById: (id: string) => Promise<AccountModel>;
+export type LoadAccountByIdRepository = (
+  id: string
+) => LoadAccountByIdRepository.Response;
+
+export namespace LoadAccountByIdRepository {
+  export type Response = LoadAccountById.Response;
 }
