@@ -2,4 +2,4 @@ language: node_js
 node_js:
   - 16
 script:
-  - npm run test:ci
+  - npm run test:coveralls
