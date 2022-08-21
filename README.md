@@ -1,6 +1,9 @@
-[![Build Status](https://travis-ci.com/AdilsonFuxe/clean-auth-microservice.svg?branch=main)](https://travis-ci.com/AdilsonFuxe/clean-auth-microservice)
-[![Coverage Status](https://coveralls.io/repos/github/AdilsonFuxe/clean-auth-microservice/badge.svg?branch=main)](https://coveralls.io/github/AdilsonFuxe/clean-auth-microservice?branch=main)
-
+<p>
+  <img alt="Build Status" src="https://travis-ci.com/AdilsonFuxe/clean-auth-microservice.svg?branch=main">
+  <img alt="Coverage Status" src="https://coveralls.io/repos/github/AdilsonFuxe/clean-auth-microservice/badge.svg?branch=main">
+   <img alt="Auth Microservice" src="https://img.shields.io/static/v1?label=Auth%20Microservice&message=V1&color=8257E5&labelColor=000000">
+   <img alt="License" src="https://img.shields.io/badge/license-MIT-brightgreen">
+</p>
 <!-- PROJECT LOGO -->
 <br />
 <p align="center">
