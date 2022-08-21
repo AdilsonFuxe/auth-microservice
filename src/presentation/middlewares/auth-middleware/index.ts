@@ -10,8 +10,6 @@ const buildAuthMiddleware: BuildAuthMiddleWare =
     if (header) {
       const accessToken = header.replace(/^Bearer\s+/, '');
       const account = await loadAccountByToken(accessToken);
-      console.log(account);
-      console.log(accessToken);
       if (account) {
         return ok({ accountId: account.id });
       }
