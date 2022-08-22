@@ -1,5 +1,5 @@
 import { signoutController } from '@src/interface/controllers';
-import { serverError } from '@src/interface/helpers';
+import { noContent, serverError } from '@src/interface/helpers';
 import { HttpRequest } from '@src/interface/protocols';
 import { mockSignout } from '@test-suite/interface';
 
@@ -24,5 +24,11 @@ describe('SignoutController', () => {
     signout.mockRejectedValue(new Error());
     const httpResponse = await sut(mockHttpRequest());
     expect(httpResponse).toEqual(serverError(new Error()));
+  });
+
+  it('Should return 204 on success', async () => {
+    const { sut, mockHttpRequest } = makeSut();
+    const httpResponse = await sut(mockHttpRequest());
+    expect(httpResponse).toEqual(noContent());
   });
 });
