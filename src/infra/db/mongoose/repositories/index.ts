@@ -3,6 +3,7 @@ import {
   LoadAccountByEmailRepository,
   LoadAccountByIdRepository,
   LoadAccountByTokenRepository,
+  SignoutRepository,
   UpdateAccessTokenRepository,
   UpdateForgotPasswordAccessTokenRepository,
   UpdatePasswordRepository,
@@ -64,5 +65,11 @@ export const updatePasswordRepository: UpdatePasswordRepository = async (
     password,
     forgotPasswordExpiresIn: null,
     forgotPasswordAccessToken: null,
+  });
+};
+
+export const signoutRepository: SignoutRepository = async (id) => {
+  await AccountModel.findByIdAndUpdate(id, {
+    accessToken: null,
   });
 };
