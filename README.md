@@ -210,3 +210,22 @@ npm test or yarn test
   "password": "new_password"
 }
 ```
+
+<br/>
+
+### Signout
+
+**Delete** `https:/localhost/api/v1/signout`
+
+##### output example
+
+#####
+
+```json
+// Delete https:/localhost/api/v1/signout
+// HEADER x-access-token = any_access_token
+
+// Request Body
+Status Code 204
+{}
+```
