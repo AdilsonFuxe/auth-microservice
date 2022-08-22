@@ -1,6 +1,6 @@
 {
-  "name": "clean-auth-microservice",
-  "version": "2.0.0",
+  "name": "auth-microservice",
+  "version": "2.1.0",
   "description": "",
   "main": "index.js",
   "scripts": {
