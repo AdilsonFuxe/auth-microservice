@@ -6,6 +6,7 @@ import {
   LoadAccountById,
   LoadAccountByToken,
   SendMail,
+  Signout,
   UpdatePassword,
 } from '@src/domain/usecases';
 import { Validation } from '@src/interface/protocols';
@@ -38,3 +39,5 @@ export const mockUpdatePassword = (): UpdatePassword => async () =>
   await Promise.resolve();
 
 export const mockValidation = (): Validation => () => null;
+
+export const mockSignout = (): Signout => async () => await Promise.resolve();
