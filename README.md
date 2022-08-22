@@ -10,9 +10,9 @@
   <a href="https://github.com/othneildrew/Best-README-Template">
   </a>
 
-  <h1 align="center">Node.js Authentication Microservice</h1>
+<h1 align="center">Node.js Authentication Microservice</h1>
 
-  <p align="center">
+<p align="center">
    A simple API built with Node.js that follows Clean Architecture + TDD + SOLID + DDD principles
     <br />
   </p>
@@ -34,6 +34,7 @@
   - [Forgot Password](#forgot-password)
   - [Reset Password](#reset-password)
   - [me](#me)
+  - [signout](#signout)
 
 <!-- ABOUT THE PROJECT -->
 
@@ -156,8 +157,6 @@ npm test or yarn test
 
 ##### output example
 
-#####
-
 ```json
 // Get https:/localhost/api/v1/me
 // HEADER x-access-token = any_access_token
@@ -179,8 +178,6 @@ npm test or yarn test
 
 ##### output example
 
-#####
-
 ```json
 // Patch https:/localhost/api/v1/forgot
 
@@ -197,8 +194,6 @@ npm test or yarn test
 **Patch** `https:/localhost/api/v1/reset-password`
 
 ##### output example
-
-#####
 
 ```json
 // Patch https:/localhost/api/v1/reset-password
@@ -218,8 +213,6 @@ npm test or yarn test
 **Delete** `https:/localhost/api/v1/signout`
 
 ##### output example
-
-#####
 
 ```json
 // Delete https:/localhost/api/v1/signout
