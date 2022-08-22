@@ -9,6 +9,7 @@ import {
   PasswordHash,
   PasswordHashCompare,
   RemoteSendMail,
+  SignoutRepository,
   UpdateAccessTokenRepository,
   UpdateForgotPasswordAccessTokenRepository,
   UpdatePasswordRepository,
@@ -58,3 +59,6 @@ export const mockDecrypt = (): Decrypt => async () =>
   await Promise.resolve('any_value');
 
 export const mockGenerateAccessToken = (): GenerateAccessToken => () => 123456;
+
+export const mockSignoutRepository = (): SignoutRepository => async () =>
+  await Promise.resolve();

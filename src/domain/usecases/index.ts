@@ -6,3 +6,4 @@ export * from './forgot-password';
 export * from './load-account-by-email';
 export * from './load-account-by-token';
 export * from './send-mail';
+export * from './signout';
