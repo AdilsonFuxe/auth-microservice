@@ -1,5 +1,5 @@
-import { InvalidParamError } from '@src/presentation/errors';
-import { Validation } from '@src/presentation/protocols';
+import { InvalidParamError } from '@src/interface/errors';
+import { Validation } from '@src/interface/protocols';
 
 export const compareFieldValidation =
   (fieldName: string, fieldToCompare: string): Validation =>

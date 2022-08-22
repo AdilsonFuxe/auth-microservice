@@ -1,5 +1,5 @@
-import { meController } from '@src/presentation/controllers';
-import { Controller } from '@src/presentation/protocols';
+import { meController } from '@src/interface/controllers';
+import { Controller } from '@src/interface/protocols';
 import { makeDbLoadAccountById } from '@src/main/factories/usecases';
 
 export const makeMeController = (): Controller =>

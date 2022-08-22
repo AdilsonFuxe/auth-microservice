@@ -1,6 +1,6 @@
-import { Controller } from '@src/presentation/protocols';
+import { Controller } from '@src/interface/protocols';
 
-import { forgotPasswordController } from '@src/presentation/controllers';
+import { forgotPasswordController } from '@src/interface/controllers';
 import { makeForgotPasswordValidation } from './forgot-password-validation-factory';
 import {
   makeDbForgotPassword,

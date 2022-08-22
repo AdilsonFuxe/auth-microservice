@@ -1,4 +1,4 @@
-import { MissingParamError } from '@src/presentation/errors';
+import { MissingParamError } from '@src/interface/errors';
 import { validationComposite } from '@src/validation/validators';
 import { mockValidation } from '@test-suite/validation';
 

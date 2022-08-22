@@ -1,5 +1,5 @@
 import { emailValidatorAdapter } from '@src/infra/validators';
-import { Validation } from '@src/presentation/protocols';
+import { Validation } from '@src/interface/protocols';
 import {
   emailValidation,
   requiredFieldValidation,

@@ -2,7 +2,7 @@ import request from 'supertest';
 import app from '@src/main/config/app';
 import { MongoHelper } from '@src/infra/db/mongoose/helper/mongo-helper';
 import { AccountModel } from '@src/infra/db/mongoose/models';
-import { HttpStatusCode } from '@src/presentation/protocols';
+import { HttpStatusCode } from '@src/interface/protocols';
 import faker from 'faker';
 
 describe('Post /signup', () => {

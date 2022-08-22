@@ -1,4 +1,4 @@
-import { Validation } from '@src/presentation/protocols';
+import { Validation } from '@src/interface/protocols';
 import { EmailValidator } from '@src/validation/protocols';
 
 export const mockEmailValidator = (): EmailValidator => () => true;

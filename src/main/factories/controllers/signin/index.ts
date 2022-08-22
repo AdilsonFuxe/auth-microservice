@@ -1,5 +1,5 @@
-import { signinController } from '@src/presentation/controllers';
-import { Controller } from '@src/presentation/protocols';
+import { signinController } from '@src/interface/controllers';
+import { Controller } from '@src/interface/protocols';
 import { makeDbAuthentication } from '@src/main/factories/usecases';
 import { makeSignInValidation } from './signin-validation-factory';
 

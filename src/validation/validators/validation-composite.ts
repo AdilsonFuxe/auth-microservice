@@ -1,4 +1,4 @@
-import { Validation } from '@src/presentation/protocols';
+import { Validation } from '@src/interface/protocols';
 
 export const validationComposite =
   (validations: Validation[]): Validation =>

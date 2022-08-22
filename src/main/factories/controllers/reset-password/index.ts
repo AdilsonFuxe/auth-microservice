@@ -1,6 +1,6 @@
-import { Controller } from '@src/presentation/protocols';
+import { Controller } from '@src/interface/protocols';
 
-import { resetPasswordController } from '@src/presentation/controllers';
+import { resetPasswordController } from '@src/interface/controllers';
 import { makeResetPasswordValidation } from './reset-password-validation-factory';
 import {
   makeDbLoadAccountByEmail,

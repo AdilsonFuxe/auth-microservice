@@ -1,4 +1,4 @@
-import { InvalidParamError } from '@src/presentation/errors';
+import { InvalidParamError } from '@src/interface/errors';
 import { emailValidation } from '@src/validation/validators/email-validation';
 import { mockEmailValidator } from '@test-suite/validation';
 

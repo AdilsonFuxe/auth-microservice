@@ -1,5 +1,5 @@
-import { signupController } from '@src/presentation/controllers';
-import { Controller } from '@src/presentation/protocols';
+import { signupController } from '@src/interface/controllers';
+import { Controller } from '@src/interface/protocols';
 import {
   makeDbAddAccount,
   makeDbAuthentication,

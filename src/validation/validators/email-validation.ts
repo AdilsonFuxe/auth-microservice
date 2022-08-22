@@ -1,5 +1,5 @@
-import { InvalidParamError } from '@src/presentation/errors';
-import { Validation } from '@src/presentation/protocols';
+import { InvalidParamError } from '@src/interface/errors';
+import { Validation } from '@src/interface/protocols';
 import { EmailValidator } from '@src/validation/protocols';
 
 export const emailValidation =
