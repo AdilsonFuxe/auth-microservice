@@ -5,6 +5,7 @@ import {
   dbLoadAccountByEmail,
   dbLoadAccountById,
   dbLoadAccountByToken,
+  dbSignout,
   dbUpdatePassword,
   sendMail,
 } from '@src/data/usecases';
@@ -16,6 +17,7 @@ import {
   LoadAccountById,
   LoadAccountByToken,
   SendMail,
+  Signout,
   UpdatePassword,
 } from '@src/domain/usecases';
 import {
@@ -32,6 +34,7 @@ import {
   updateForgotPasswordAccessTokenRepository,
   loadAccountByIdRepository,
   updatePasswordRepository,
+  signoutRepository,
 } from '@src/infra/db/mongoose/repositories';
 import { nodeMailerAdapter } from '@src/infra/remote';
 import env from '@src/main/config/env';
@@ -88,3 +91,5 @@ export const makeSendMail = (): SendMail =>
       pass: env.smtpPass,
     }),
   });
+
+export const makeDbSignout = (): Signout => dbSignout({ signoutRepository });
