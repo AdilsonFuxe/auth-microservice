@@ -1,4 +1,5 @@
 import { signoutController } from '@src/interface/controllers';
+import { serverError } from '@src/interface/helpers';
 import { HttpRequest } from '@src/interface/protocols';
 import { mockSignout } from '@test-suite/interface';
 
@@ -16,5 +17,12 @@ describe('SignoutController', () => {
     const { sut, signout, mockHttpRequest } = makeSut();
     await sut(mockHttpRequest());
     expect(signout).toHaveBeenCalledWith('any_account_id');
+  });
+
+  it('Should return 500 if signout throws', async () => {
+    const { sut, signout, mockHttpRequest } = makeSut();
+    signout.mockRejectedValue(new Error());
+    const httpResponse = await sut(mockHttpRequest());
+    expect(httpResponse).toEqual(serverError(new Error()));
   });
 });
