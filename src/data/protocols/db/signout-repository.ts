@@ -1,7 +1,8 @@
 import { Signout } from '@src/domain/usecases';
 
 export type SignoutRepository = (
-  accountId: string
+  accountId: string,
+  accessToken: string
 ) => SignoutRepository.Response;
 
 export namespace SignoutRepository {

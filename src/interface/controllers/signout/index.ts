@@ -4,7 +4,11 @@ import { BuildSignoutController } from './protocols';
 const buildSignoutController: BuildSignoutController =
   ({ signout }) =>
   async (httpRequest) => {
-    await signout(httpRequest.accountId);
+    const header =
+      httpRequest.headers?.['x-access-token'] ||
+      httpRequest.headers?.authorization;
+    const accessToken = header.replace(/^Bearer\s+/, '');
+    await signout(httpRequest.accountId, accessToken);
     return noContent();
   };
 
