@@ -20,12 +20,16 @@ describe('Delete /signout', () => {
 
   it('Should return 204 on signout success', async () => {
     const accessToken = await mockAuthenticateUser();
-    const accountBeforeSignout = await AccountModel.findOne({ accessToken });
+    const accountBeforeSignout = await AccountModel.findOne({
+      'sessions.accessToken': accessToken,
+    });
     await request(app)
       .delete('/api/v1/signout')
       .set('x-access-token', accessToken)
       .expect(204);
-    const accountAfterSignout = await AccountModel.findOne({ accessToken });
+    const accountAfterSignout = await AccountModel.findOne({
+      'sessions.accessToken': accessToken,
+    });
     expect(accountBeforeSignout).toBeTruthy();
     expect(accountAfterSignout).toBeFalsy();
   });

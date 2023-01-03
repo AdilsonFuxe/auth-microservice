@@ -37,7 +37,18 @@ export const mockCreateAccountOnDb =
 export const mockAuthenticateUser = async (): Promise<string> => {
   const { accountId } = await mockCreateAccountOnDb();
   const accessToken = sign({ accountId }, env.jwtSecret);
-  await AccountModel.updateOne({ _id: accountId }, { accessToken });
+  await AccountModel.updateOne(
+    { _id: accountId },
+    {
+      sessions: [
+        {
+          accessToken,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+      ],
+    }
+  );
   return accessToken;
 };
 
