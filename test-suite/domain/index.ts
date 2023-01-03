@@ -9,8 +9,16 @@ export const mockAccount = (): AccountModel => {
     lastName: 'valid_last_name',
     email: 'valid_email',
     password: 'valid_password',
-    accessToken: 'valid_accessToken',
+    sessions: [
+      {
+        accessToken: 'valid_accessToken',
+        createdAt: new Date(2023, 9, 24),
+        updatedAt: new Date(2023, 9, 24),
+      },
+    ],
     forgotPasswordAccessToken: 123456,
     forgotPasswordExpiresIn: date,
+    createdAt: new Date(2023, 9, 24),
+    updatedAt: new Date(2023, 9, 24),
   };
 };

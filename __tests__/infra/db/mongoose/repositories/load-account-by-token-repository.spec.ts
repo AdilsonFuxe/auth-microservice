@@ -17,7 +17,7 @@ describe('LoadAccountByTokenMongoRepository', () => {
 
   it('Should return null account loaded not found', async () => {
     const sut = makeSut();
-    const account = await sut(faker.random.uuid());
+    const account = await sut(faker.random.alphaNumeric(10));
     expect(account).toBeNull();
   });
 
@@ -29,10 +29,15 @@ describe('LoadAccountByTokenMongoRepository', () => {
       lastName: faker.name.lastName(),
       email: faker.internet.email(),
       password: faker.internet.password(),
-      accessToken,
+      sessions: [
+        {
+          accessToken,
+          createdAt: new Date(2023, 9, 24),
+          updatedAt: new Date(2023, 9, 24),
+        },
+      ],
     });
     const account = await sut(accessToken);
     expect(account).toBeTruthy();
-    expect(account.accessToken).toBe(accessToken);
   });
 });

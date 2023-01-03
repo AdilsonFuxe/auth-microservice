@@ -5,6 +5,16 @@ import {
   Schemas,
 } from './models-protocols';
 
+const SessionSchema = new Schema(
+  {
+    accessToken: {
+      type: String,
+      required: true,
+    },
+  },
+  { timestamps: true }
+);
+
 const AccountSchema = new Schema<AccountDocument>(
   {
     firstName: {
@@ -29,8 +39,9 @@ const AccountSchema = new Schema<AccountDocument>(
       required: true,
       minlength: [6, 'password must be at least 6 characters'],
     },
-    accessToken: {
-      type: String,
+    sessions: {
+      type: [SessionSchema],
+      default: [],
     },
     forgotPasswordAccessToken: {
       type: Number,

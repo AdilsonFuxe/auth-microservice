@@ -6,6 +6,9 @@ import { mockSignout } from '@test-suite/interface';
 const makeSut = () => {
   const mockHttpRequest = (): HttpRequest => ({
     accountId: 'any_account_id',
+    headers: {
+      'x-access-token': 'Bearer any_token',
+    },
   });
   const signout = jest.fn(mockSignout());
   const sut = signoutController({ signout });
@@ -16,7 +19,7 @@ describe('SignoutController', () => {
   it('Should call signout with correct accountId', async () => {
     const { sut, signout, mockHttpRequest } = makeSut();
     await sut(mockHttpRequest());
-    expect(signout).toHaveBeenCalledWith('any_account_id');
+    expect(signout).toHaveBeenCalledWith('any_account_id', 'any_token');
   });
 
   it('Should return 500 if signout throws', async () => {

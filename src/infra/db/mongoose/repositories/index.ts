@@ -33,7 +33,9 @@ export const loadAccountByIdRepository: LoadAccountByIdRepository = async (
 
 export const loadAccountByTokenRepository: LoadAccountByTokenRepository =
   async (accessToken) => {
-    const account = await AccountModel.findOne({ accessToken }).lean();
+    const account = await AccountModel.findOne({
+      'sessions.accessToken': accessToken,
+    }).lean();
     return MongoHelper.serialize(account);
   };
 
@@ -41,7 +43,11 @@ export const updateAccessTokenRepository: UpdateAccessTokenRepository = async (
   id,
   token
 ) => {
-  await AccountModel.findByIdAndUpdate(id, { accessToken: token });
+  await AccountModel.findByIdAndUpdate(id, {
+    $push: {
+      sessions: { accessToken: token },
+    },
+  });
 };
 
 export const updateForgotPasswordAccessTokenRepository: UpdateForgotPasswordAccessTokenRepository =
@@ -68,8 +74,11 @@ export const updatePasswordRepository: UpdatePasswordRepository = async (
   });
 };
 
-export const signoutRepository: SignoutRepository = async (id) => {
-  await AccountModel.findByIdAndUpdate(id, {
-    accessToken: null,
+export const signoutRepository: SignoutRepository = async (
+  accountId,
+  accessToken
+) => {
+  await AccountModel.findByIdAndUpdate(accountId, {
+    $pull: { sessions: { accessToken } },
   });
 };
