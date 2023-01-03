@@ -13,14 +13,17 @@ const makeSut = () => {
 describe('Signout Usecases', () => {
   it('Should call signoutRepository with correct accountId', async () => {
     const { sut, signoutRepository } = makeSut();
-    await sut('any_account_id');
-    expect(signoutRepository).toHaveBeenCalledWith('any_account_id');
+    await sut('any_account_id', 'valid_accessToken');
+    expect(signoutRepository).toHaveBeenCalledWith(
+      'any_account_id',
+      'valid_accessToken'
+    );
   });
 
   it('Should throw if signoutRepository throws', async () => {
     const { sut, signoutRepository } = makeSut();
     signoutRepository.mockRejectedValue(new Error());
-    const promise = sut('any_account_id');
+    const promise = sut('any_account_id', 'valid_accessToken');
     await expect(promise).rejects.toThrow();
   });
 });

@@ -23,11 +23,17 @@ describe('SignoutRepository', () => {
       lastName: faker.name.lastName(),
       email: faker.internet.email(),
       password: faker.internet.password(),
-      accessToken,
+      sessions: [
+        {
+          accessToken,
+          createdAt: new Date(2023, 9, 24),
+          updatedAt: new Date(2023, 9, 24),
+        },
+      ],
     });
-    expect(account.accessToken).toBe(accessToken);
-    await sut(account.id);
+    expect(account.sessions[0].accessToken).toBe(accessToken);
+    await sut(account.id, accessToken);
     const result = await AccountModel.findById(account.id);
-    expect(result.accessToken).toBeNull();
+    expect(result.sessions).toHaveLength(0);
   });
 });

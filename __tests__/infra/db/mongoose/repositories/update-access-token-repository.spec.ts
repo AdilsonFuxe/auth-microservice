@@ -23,10 +23,10 @@ describe('UpdateAccessTokenMongoRepository', () => {
       email: faker.internet.email(),
       password: faker.internet.password(),
     });
-    expect(account.accessToken).toBeFalsy();
+    expect(account.sessions).toHaveLength(0);
     const accessToken = faker.datatype.uuid();
     await sut(account.id, accessToken);
     const result = await AccountModel.findById(account.id);
-    expect(result.accessToken).toBe(accessToken);
+    expect(result.sessions).toHaveLength(1);
   });
 });
